@@ -16,6 +16,7 @@
 	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
 	<script src="jquery.svgdom.min.js"></script>
 	<script src="js.js"></script>
+	<script src="viz.js"></script>
 </head>
 
 <body>

@@ -26,4 +26,3 @@ function returnCarriers() {
 	return $airlines;
 }
 ?>
-

@@ -1,5 +1,5 @@
 .axis {
-  font-size:10px;
+  font-size:12px;
   font-family:"Open Sans",sans-serif;
 }
 
@@ -23,9 +23,9 @@ svg {
 	margin-left:50px;
 }
 
-.axis path,.tick {
+.axis path, .tick {
   fill:none;
-  stroke:#000;
+  stroke:#777;
 }
 
 .title {
