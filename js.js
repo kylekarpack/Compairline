@@ -17,7 +17,7 @@ $(window).load(function() {
 		var sel = this.id;
 		var selc = $(this).attr("class");
 		if (selc === "airline") {
-			$("." + sel + ", ." + sel + "Path").fadeToggle();
+			$("circle." + sel + ", ." + sel + "Path").fadeToggle();
 		} else { //selc === "data"
 			if (sel === "trend") {
 				$("path.trend").fadeToggle();

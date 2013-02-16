@@ -125,20 +125,22 @@ function draw(data) {
 		
 
 		var x_extent = d3.extent(data, function(d){return d[0][0]});
+		x_extent = [0, 24];
+		console.log(x_extent);
 		var x_scale = d3.scale.linear().domain(x_extent).range([.5 * margin, width]);
 		
 		var y_extent = d3.extent(data, function(d){return d[0][1]});
-		var y_scale = d3.scale.linear().domain(y_extent).range([8 * h, margin]);		
+		var y_scale = d3.scale.linear().domain(y_extent).range([margin, 8 * h]);		
 		
 		var x_axis = d3.svg.axis().scale(x_scale);
 		d3.select("svg").append("g").attr("class", "x axis").attr("transform", "translate(" + margin / 2 + "," + (margin + h * 8) + ")").call(x_axis);
 		
-		var y_axis = d3.svg.axis().scale(y_scale).orient("left");
+		var y_axis = d3.svg.axis().scale(y_scale).orient("left").ticks(8);
 		d3.select("svg").append("g").attr("class", "y axis").attr("transform", "translate(" + margin + ", " + margin + " )").call(y_axis);
 		
 		//axis titles
-		//d3.select(".x.axis").append("text").text("Day of January").attr("x", function(){return width / 2 }).attr("y", margin/1.5); 
-		//d3.select(".y.axis").append("text").text("Average Delay (Minutes)").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", height / 2 - margin).attr("y", 0);		
+		d3.select(".x.axis").append("text").text("Time").attr("x", function(){return width / 2 }).attr("y", margin/1.5); 
+		d3.select(".y.axis").append("text").text("Day of the Week)").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", 3 * h - margin).attr("y", 0);		
 		
 		//bind popovers
 		$("rect").popover({trigger:'click', placement:'0 0 0 0', title:'Title!', content:'Content'});
