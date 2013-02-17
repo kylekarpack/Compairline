@@ -23,12 +23,17 @@
 <?php include("functions.php"); ?>
 <div id="sel">
 	<h3>Airline:</h3>
-	<form>
 	<?php 
 	foreach (returnCarriers() as $airline) { ?>
-		<label class="<?= $airline ?> checkbox"><input class="airline" id="<?= $airline ?>" name="<?= $airline ?>" type="checkbox" checked="checked"><?= $airline ?></input></label>
+		<div class="airline">
+			<label class="<?= $airline ?>">&nbsp;</label><span><?= $airline ?></span><br />
+			<div class="toggles">
+				<button type="button" class="btn airline mute" name="<?= $airline ?>">Hide</button>
+				<button type="button" class="btn airline solo" name="<?= $airline ?>">Solo</button>
+			</div>
+		</div>
+		<div class="clear"></div>
 	<?php } ?>
-	</form>
 	<hr/>
 	<h3>Data:</h3>
 	<label class="checkbox"><input class="data" id="trend" type="checkbox" checked="checked"></input>Trend Lines</label>

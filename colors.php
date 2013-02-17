@@ -9,11 +9,11 @@ echo("/*Auto-generated colors for each airline*/\n");
 foreach (returnCarriers() as $carrier) {
 	$c = colorGen($carrier);
 	echo ("." . $carrier . " {fill: " . $c . ";}\n");
-	echo ("." . strtolower($carrier) . "Path {stroke: " . $c . ";}\n");
 	echo ("label." . $carrier . " {background: " . $c . ";}\n");
+	echo ("path." . $carrier . " {stroke: " . $c . ";}\n");
 }
 
 function colorGen($str) {
-	return "#" . substr(md5($str), 2, 3);
+	return "#" . substr(md5($str), 8, 3);
 }
 ?>

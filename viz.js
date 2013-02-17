@@ -70,13 +70,12 @@ function draw(data) {
 		//axis titles
 		d3.select(".x.axis").append("text").text("Day of January").attr("x", function(){return width / 2 }).attr("y", margin/1.5); 
 		d3.select(".y.axis").append("text").text("Average Delay (Minutes)").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", height / 2 - margin).attr("y", 0);
-
 		
 		//Paths
 		var line = d3.svg.line().x(function(d){return x_scale(d.day)}).y(function(d){return y_scale(d.delay)}).interpolate("basis");
 
 		for (var i = 0; i < allKeys.length; i++) {
-			animate(d3.select("svg").append("path").attr("d", line(data[allKeys[i]])).attr("class", allKeys[i] + "Path trend"));
+			animate(d3.select("svg").append("path").attr("d", line(data[allKeys[i]])).attr("class", allKeys[i] + " trend"));
 		}
 		
 		//smooth animations (hacky)
