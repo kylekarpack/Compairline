@@ -1,4 +1,3 @@
-
 //dimensions. relative to window size
 var margin = width = $(window).width() / 30,    width = $(window).width() - 300,    height = $(window).height() - 200;
 
@@ -16,12 +15,11 @@ $(window).resize(function() {
 //END FRONT END CODE
 	
 //Draw function. This is where the money is at
-function draw(data) {
+function draw(data, flag) {
 	$("#loading").fadeOut();
-
 	//checks if the object is the heatmap data. NEED TO PASS A PARAMETER INSTEAD
-	if (Object.keys(data).length !== 158) { //this is so bad. To my mother and anyone who ever thought I would amount to anything, I am so sorry.
-	
+	if (flag === "plot") { //this is so bad. To my mother and anyone who ever thought I would amount to anything, I am so sorry.
+
 		d3.select("body")
 			.append("svg")    
 			.attr("width", width+margin) 
@@ -99,7 +97,10 @@ function draw(data) {
 		  .append("g")
 			.attr("transform", "translate(" + margin + "," + margin + ")");
 			
-		var gridSize = Math.floor($("svg").width() / 26),
+		var isW = Math.floor($("svg").width() / 26);
+		var isH = Math.floor($("svg").height() / 7);
+		
+		var gridSize = isW < isH ? isW : isH;
 			h = gridSize,
 			w = gridSize,
 			rectPadding = 60;
@@ -125,7 +126,6 @@ function draw(data) {
 
 		var x_extent = d3.extent(data, function(d){return d[0][0]});
 		x_extent = [0, 24];
-		console.log(x_extent);
 		var x_scale = d3.scale.linear().domain(x_extent).range([.5 * margin, width]);
 		
 		var y_extent = d3.extent(data, function(d){return d[0][1]});
@@ -139,7 +139,7 @@ function draw(data) {
 		
 		//axis titles
 		d3.select(".x.axis").append("text").text("Time").attr("x", function(){return width / 2 }).attr("y", margin/1.5); 
-		d3.select(".y.axis").append("text").text("Day of the Week)").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", 3 * h - margin).attr("y", 0);		
+		d3.select(".y.axis").append("text").text("Day of the Week").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", 3 * h - margin).attr("y", 0);		
 		
 		//bind popovers
 		$("rect").popover({trigger:'click', placement:'0 0 0 0', title:'Title!', content:'Content'});

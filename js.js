@@ -5,15 +5,35 @@ $(window).load(function() {
 		$("button").removeClass("btn-success"); //button highlighting
 		$(this).addClass("btn-success"); //button highlighting
 		$("body svg").fadeOut(function() {this.remove()}); //remove the old viz
-		d3.json("data.php?type=" + this.id, draw); //draw the new one
+		
+		var type = this.id;
+		if (type === "plot") {
+			$("#controls button").removeAttr("disabled");
+		}
+		
+		var query = "data.php?type=" + type;
+
+		$.ajax({
+			url: query,
+			dataType: 'json',
+			success: function(response) {
+				draw(response, type);
+			},
+			error: function(response) {
+				console.warn("There was an error receiving your data.");
+				$("#loading").fadeOut(); //ajax loading
+				$("#error").modal(); //launch the error box
+			}
+		});
 	});
+
 	
 	$('input.data').change(function() {
 		$('input.airline').prop("disabled",!$('input.airline').prop("disabled"))
 	});
 	
 	//button branching logic needs help
-	$('#sel button').bind("click", function() {
+	$('#controls button').bind("click", function() {
 		var btn = $(this);
 		if (btn.hasClass("mute")) { //if it's a do one button
 			if (btn.hasClass("hid")) {
@@ -35,20 +55,8 @@ $(window).load(function() {
 	});
 	
 	//data type toggle on plot
-	$('#sel button.data').click(function() {
-		if (this.id === "trend") {
-			$("path.trend").fadeToggle();
-			if (!($("#" + sel).is(":checked"))) {
-				$("circle").animate({"opacity":1});
-				$("circle").attr({"r":5});
-			} else {
-				$("circle").animate({"opacity":.3});
-				$("circle").attr({"r":3});
-			}
-			
-		} else {
-			$("circle").fadeToggle();
-		}
+	$('#controls button.data').click(function() {
+		//type selector code here
 	});
 
 });

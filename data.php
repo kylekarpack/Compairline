@@ -1,10 +1,10 @@
 <?php
+header('Content-type: application/json'); //set it to return json
 
 include("functions.php");
 $host = get("host");
 $username = get("username");
 $password = get("password");
-
 $con = mysql_select_db("flights", mysql_connect($host, $username, $password));
 
 $airlines = returnCarriers();
@@ -30,7 +30,6 @@ if ($request_type == "plot") {
 		array_push($delays[$row["CARRIER"]], array("day" => (int) $row["DAY_OF_MONTH"], "delay" => (float) $row["DELAY"]));
 	}
 	
-	header('Content-type: application/json');
 	echo ( json_encode($delays) );
 //It's a request for a heat map!!	
 } elseif ($request_type == "heat") { // DO SOMETHING BETTER THAN TRUNCATING 24 values!!!
@@ -44,7 +43,7 @@ if ($request_type == "plot") {
 		$timeXY = array($time, $day);
 		array_push($delays, array($timeXY, (float) $row["DELAY"]));
 	}
-		
+	
 	echo (json_encode($delays));
 		
 } else {

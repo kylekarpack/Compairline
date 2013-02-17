@@ -21,19 +21,25 @@
 
 <body>
 <?php include("functions.php"); ?>
-<div id="sel">
+<div id="controls">
 	<h3>Airline:</h3>
+	<table>
 	<?php 
 	foreach (returnCarriers() as $airline) { ?>
-		<div class="airline">
-			<label class="<?= $airline ?>">&nbsp;</label><span><?= $airline ?></span><br />
-			<div class="toggles">
-				<button type="button" class="btn airline mute" name="<?= $airline ?>">Hide</button>
-				<button type="button" class="btn airline solo" name="<?= $airline ?>">Solo</button>
-			</div>
+			<tr>
+				<td>
+					<label class="<?= $airline ?>">&nbsp;</label>
+					<span><?= $airline ?></span>
+				</td>
+				<td>
+					<button type="button" class="btn airline mute" name="<?= $airline ?>" disabled="disabled">Hide</button>
+					<button type="button" class="btn airline solo" name="<?= $airline ?>" disabled="disabled">Solo</button>
+				</td>
+			</tr>
 		</div>
 		<div class="clear"></div>
 	<?php } ?>
+	</table>
 	<hr/>
 	<h3>Data:</h3>
 	<label class="checkbox"><input class="data" id="trend" type="checkbox" checked="checked"></input>Trend Lines</label>
@@ -47,5 +53,18 @@
   <button id="heat" class="btn">Draw me a heatmap!</button>
 </div>
 <div id="loading"><img src="ajax-loader.gif"></div>  
+<div id="error" class="modal hide fade" tabindex="-1" role="dialog">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">x</button>
+		<h3>An Error Has Occurred</h3>
+	</div>
+	<div class="modal-body">
+		<p>We're sorry. An error has occurred. It may have been something you did, but it's more likely a problem with our data service. Please try again later.</p>
+		<p>Please <a href="mailto:kkarpack@uw.edu">contact Kyle</a> if you have a moment to let him know.</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" data-dismiss="modal">Close</button>
+	</div>
+</div>
 </body>
 </html>
