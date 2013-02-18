@@ -48,13 +48,26 @@ $(window).load(function() {
 	//data type toggle on plot
 	$('#controls button.data').bind("click", function() {
 		var type = this.id;
-		if (type === "data") {
+		if (type === "data") { //data points
 			if ($(this).hasClass("hid")) {
 				$(this).toggleClass("hid").toggleClass("btn-danger");
-				$("circle").fadeIn();
+				$("circle").fadeIn(800);
+				$("path.trend").animate({"stroke-width":2},1000);
+
 			} else {
 				$(this).toggleClass("hid").toggleClass("btn-danger");
-				$("circle").fadeOut();
+				$("circle").fadeOut(800);
+				$("path.trend").animate({"stroke-width":3},1000);
+			}
+		} else { //trend lines
+			if ($(this).hasClass("hid")) {
+				$(this).toggleClass("hid").toggleClass("btn-danger");
+				$("path.trend").fadeIn(800);
+				$("circle").animate({"opacity":.5, "stroke-width":0},800);
+			} else {
+				$(this).toggleClass("hid").toggleClass("btn-danger");
+				$("path.trend").fadeOut(800);
+				$("circle").animate({"opacity":1, "stroke-width":4},800);
 			}
 		}
 	});

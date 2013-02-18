@@ -10,7 +10,7 @@ foreach (returnCarriers() as $carrier) {
 	$c = colorGen($carrier);
 	echo ("." . $carrier . " {fill: " . $c . ";}\n");
 	echo ("label." . $carrier . " {background: " . $c . ";}\n");
-	echo ("path." . $carrier . " {stroke: " . $c . ";}\n");
+	echo ("path." . $carrier . ", circle." . $carrier . " {stroke: " . $c . ";}\n");
 }
 
 function colorGen($str) {

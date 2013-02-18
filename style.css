@@ -79,6 +79,10 @@ td {
 	clear:both;
 }
 
+.hid-master {
+	opacity:0;
+}
+
 #controls {
 	position:absolute;
 	left:0;

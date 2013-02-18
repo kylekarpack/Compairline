@@ -1,13 +1,13 @@
 // dimensions. relative to window size
 // these should be made more robust
 var margin = $(window).width() / 30;
-var width = $(window).width() - 300
-var height = $(window).height() - 100;
+var width = $(window).width() - 300 - $("#controls").width(); 
+var height = $(window).height() - 150;
 
 function resize() {
 	margin = $(window).width() / 30;
-	width = $(window).width() - $("#controls").width();
-	height = $(window).height();
+	width = $(window).width() - 300 - $("#controls").width();
+	height = $(window).height() - 150;
 }
 
 //LOOK HERE: http://stackoverflow.com/questions/9400615/whats-the-best-way-to-make-a-d3-js-visualisation-layout-responsive
