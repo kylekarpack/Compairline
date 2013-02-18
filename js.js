@@ -2,15 +2,11 @@
 $(window).load(function() {
 	$(".btn-group button").bind("click", function() {
 		$("#loading").fadeIn(); //ajax loading
-		$("button").removeClass("btn-success"); //button highlighting
-		$(this).addClass("btn-success"); //button highlighting
+		$("button").removeClass("btn-primary"); //button highlighting
+		$(this).addClass("btn-primary"); //button highlighting
 		$("body svg").fadeOut(function() {this.remove()}); //remove the old viz
 		
 		var type = this.id;
-		if (type === "plot") {
-			$("#controls button").removeAttr("disabled");
-		}
-		
 		var query = "data.php?type=" + type;
 
 		$.ajax({
@@ -26,11 +22,6 @@ $(window).load(function() {
 			}
 		});
 	});
-
-	
-	$('input.data').change(function() {
-		$('input.airline').prop("disabled",!$('input.airline').prop("disabled"))
-	});
 	
 	//button branching logic needs help
 	$('#controls button').bind("click", function() {
@@ -43,7 +34,7 @@ $(window).load(function() {
 			}
 			$("circle." + btn.attr("name") + ", path." + btn.attr("name")).fadeToggle();
 			console.log("circle." + btn.attr("name") + ", path." + btn.attr("name"));
-		} else { //it's a "toggle others" button ("solo")
+		} else if (btn.hasClass("solo")) { //it's a "toggle others" button ("solo")
 			if (btn.hasClass("hid")) {
 				btn.toggleClass("hid").toggleClass("btn-warning");
 			} else {
@@ -55,8 +46,17 @@ $(window).load(function() {
 	});
 	
 	//data type toggle on plot
-	$('#controls button.data').click(function() {
-		//type selector code here
+	$('#controls button.data').bind("click", function() {
+		var type = this.id;
+		if (type === "data") {
+			if ($(this).hasClass("hid")) {
+				$(this).toggleClass("hid").toggleClass("btn-danger");
+				$("circle").fadeIn();
+			} else {
+				$(this).toggleClass("hid").toggleClass("btn-danger");
+				$("circle").fadeOut();
+			}
+		}
 	});
 
 });

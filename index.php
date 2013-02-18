@@ -36,34 +36,31 @@
 					<button type="button" class="btn airline solo" name="<?= $airline ?>" disabled="disabled">Solo</button>
 				</td>
 			</tr>
-		</div>
-		<div class="clear"></div>
 	<?php } ?>
 	</table>
 	<hr/>
-	<h3>Data:</h3>
-	<label class="checkbox"><input class="data" id="trend" type="checkbox" checked="checked"></input>Trend Lines</label>
-	<label class="checkbox"><input class="data" id="data" type="checkbox" checked="checked"></input>Data Points</label>
-	
+	<h3>Toggle Data:</h3>
+	<button class="data btn" id="trend">Trend Lines</button>
+	<button class="data btn" id="data">Data Points</button>
 </div>
-<div id="bg">
-</div>
-<div class="btn-group">
-  <button id="plot" class="btn">Draw me a plot!</button>
-  <button id="heat" class="btn">Draw me a heatmap!</button>
-</div>
-<div id="loading"><img src="ajax-loader.gif"></div>  
-<div id="error" class="modal hide fade" tabindex="-1" role="dialog">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal">x</button>
-		<h3>An Error Has Occurred</h3>
+<div id="viz">
+	<div class="btn-group">
+	  <button id="plot" class="btn">Draw me a plot!</button>
+	  <button id="heat" class="btn">Draw me a heatmap!</button>
 	</div>
-	<div class="modal-body">
-		<p>We're sorry. An error has occurred. It may have been something you did, but it's more likely a problem with our data service. Please try again later.</p>
-		<p>Please <a href="mailto:kkarpack@uw.edu">contact Kyle</a> if you have a moment to let him know.</p>
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" data-dismiss="modal">Close</button>
+	<div id="loading"><img src="ajax-loader.gif"></div>  
+	<div id="error" class="modal hide fade" tabindex="-1" role="dialog">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>An Error Has Occurred</h3>
+		</div>
+		<div class="modal-body">
+			<p>We're sorry. An error has occurred. It may have been something you did, but it's more likely a problem with our data service. Please try again later.</p>
+			<p>Please <a href="mailto:kkarpack@uw.edu">contact Kyle</a> if you have a moment to let him know.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" data-dismiss="modal">Close</button>
+		</div>
 	</div>
 </div>
 </body>

@@ -20,10 +20,6 @@ path {
 	opacity:.7;
 }
 
-svg {
-	margin-left:50px;
-}
-
 .axis path, .tick {
   fill:none;
   stroke:#777;
@@ -76,12 +72,7 @@ label {
 
 td {
 	min-width:65px;
-	padding:10% 1%;
-}
-
-div.airline {
-	clear:both;
-	width:100%;
+	padding:5% 1%;
 }
 
 .clear {
@@ -90,13 +81,12 @@ div.airline {
 
 #controls {
 	position:absolute;
+	left:0;
 	top:0;
-	right:0;
 	padding:1%;
 	box-shadow: 0 0 25px #aaa;
 	background:rgba(0,0,0,.6);
 	color:#fff;
-	height:100%;
 }
 
 #controls span {

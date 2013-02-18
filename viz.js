@@ -1,10 +1,13 @@
-//dimensions. relative to window size
-var margin = width = $(window).width() / 30,    width = $(window).width() - 300,    height = $(window).height() - 200;
+// dimensions. relative to window size
+// these should be made more robust
+var margin = $(window).width() / 30;
+var width = $(window).width() - 300
+var height = $(window).height() - 100;
 
 function resize() {
-	margin = width = $(window).width() / 50;
-	width = $(window).width() - 300;
-	height = $(window).height() - 200;
+	margin = $(window).width() / 30;
+	width = $(window).width() - $("#controls").width();
+	height = $(window).height();
 }
 
 //LOOK HERE: http://stackoverflow.com/questions/9400615/whats-the-best-way-to-make-a-d3-js-visualisation-layout-responsive
@@ -17,18 +20,17 @@ $(window).resize(function() {
 //Draw function. This is where the money is at
 function draw(data, flag) {
 	$("#loading").fadeOut();
-	//checks if the object is the heatmap data. NEED TO PASS A PARAMETER INSTEAD
-	if (flag === "plot") { //this is so bad. To my mother and anyone who ever thought I would amount to anything, I am so sorry.
+	$("#controls button").removeAttr("disabled");
+
+	if (flag === "plot") {
 
 		d3.select("body")
 			.append("svg")    
 			.attr("width", width+margin) 
-			.attr("height", height+margin);
+			.attr("height", height+margin+margin)
 		
-		// Takes a parameter:
-			//
+		// Takes parameters: data, name of the airline
 		// Does: Draws the CIRCLES ONLY for that airline
-		// Heads up. I DON'T KNOW WHY this works right now
 		function graphAirline(data, name) {			
 			d3.select("svg")
 				.selectAll("circle." + name)
@@ -54,9 +56,12 @@ function draw(data, flag) {
 		var y_extent = d3.extent(allData, function(d){return d.delay});
 		var y_scale = d3.scale.linear().domain(y_extent).range([height, margin]);
 
+		//this is using invalid attributes. easy, but semantically bad?
 		d3.selectAll("circle")  
 			.attr("cx", function(d){return x_scale(d.day)})
-			.attr("cy", function(d){return y_scale(d.delay)});
+			.attr("day", function(d){return d.day })
+			.attr("cy", function(d){return y_scale(d.delay)})
+			.attr("delay", function(d){return d.delay});
 		
 		//Create Axes
 		var x_axis  = d3.svg.axis().scale(x_scale);
@@ -66,7 +71,7 @@ function draw(data, flag) {
 		d3.select("svg").append("g").attr("class", "y axis").attr("transform", "translate(" + margin + ", 0 )").call(y_axis);
 		
 		//axis titles
-		d3.select(".x.axis").append("text").text("Day of January").attr("x", function(){return width / 2 }).attr("y", margin/1.5); 
+		d3.select(".x.axis").append("text").text("Day of January").attr("x", function(){return width / 2 }).attr("y", margin); 
 		d3.select(".y.axis").append("text").text("Average Delay (Minutes)").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", height / 2 - margin).attr("y", 0);
 		
 		//Paths
@@ -88,16 +93,14 @@ function draw(data, flag) {
 				.attr("stroke-dashoffset", 0);
 		}
 	} else {	//heatmap
-			//height of each row in the heatmap
-		//width of each column in the heatmap
-
 		var svg = d3.select("body").append("svg")
-			.attr("width", width + margin + margin)
-			.attr("height", height + margin + margin)
+			.attr("width", width + margin)
+			.attr("height", height + margin)
 		  .append("g")
 			.attr("transform", "translate(" + margin + "," + margin + ")");
-			
-		var isW = Math.floor($("svg").width() / 26);
+		
+		console.log(height + margin);
+		var isW = Math.floor($("svg").width() / 25);
 		var isH = Math.floor($("svg").height() / 7);
 		
 		var gridSize = isW < isH ? isW : isH;
@@ -138,12 +141,17 @@ function draw(data, flag) {
 		d3.select("svg").append("g").attr("class", "y axis").attr("transform", "translate(" + margin + ", " + margin + " )").call(y_axis);
 		
 		//axis titles
-		d3.select(".x.axis").append("text").text("Time").attr("x", function(){return width / 2 }).attr("y", margin/1.5); 
+		d3.select(".x.axis").append("text").text("Time").attr("x", function(){return width / 2 }).attr("y", margin); 
 		d3.select(".y.axis").append("text").text("Day of the Week").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", 3 * h - margin).attr("y", 0);		
-		
-		//bind popovers
-		$("rect").popover({trigger:'click', placement:'0 0 0 0', title:'Title!', content:'Content'});
-
 	}
+	//move it past the controls
+	$("svg").css("margin-left", $("#controls").width() + margin);
+	
+	//TOOLTIPS
+	$("circle").mouseenter(function() {
+		console.log("Delay: " + this.getAttribute("delay"));
+		console.log("Day: " + this.getAttribute("day"));
+		console.log("Airline: " + this.getAttribute("class"));
+	});
 
 } //END DRAW

@@ -1,7 +1,7 @@
 <?php
 header('Content-type: application/json'); //set it to return json
 
-include("functions.php");
+include("functions.php"); //include the credentials grabber function
 $host = get("host");
 $username = get("username");
 $password = get("password");
@@ -49,8 +49,5 @@ if ($request_type == "plot") {
 } else {
 	echo ("Error");
 }
-// foreach ($query as $row) {
-	// echo $row["DepDelay"];
-// }
 
 ?>
