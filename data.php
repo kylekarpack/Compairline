@@ -5,7 +5,7 @@ include("functions.php"); //include the credentials grabber function
 $host = get("host");
 $username = get("username");
 $password = get("password");
-$con = mysql_select_db("flights", mysql_connect($host, $username, $password));
+$con = mysql_select_db("kkarpack_flights", mysql_connect($host, $username, $password));
 
 $airlines = returnCarriers();
 
@@ -17,8 +17,8 @@ if ($request_type == "plot") {
 	
 	//This is a bit hacky. Allows limiting number of airlines to ones in the list
 	//Array to list for SQL query
-	$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'";
-	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, CARRIER, avg(DEP_DELAY_NEW) as DELAY FROM prototype " . $airString . " GROUP BY CARRIER, DAY_OF_MONTH;");
+	$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'"; //yipes. do this with a join instead?
+	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, CARRIER, avg(DEP_DELAY) as DELAY FROM flight_data " . $airString . " GROUP BY CARRIER, DAY_OF_MONTH;");
 	
 	//create delays array with empty array for each airline
 	foreach ($airlines as $airline) {
@@ -33,7 +33,7 @@ if ($request_type == "plot") {
 	echo ( json_encode($delays) );
 //It's a request for a heat map!!	
 } elseif ($request_type == "heat") { // DO SOMETHING BETTER THAN TRUNCATING 24 values!!!
-	$query = mysql_query("SELECT DAY_OF_WEEK, FLOOR(DEP_TIME/100) AS HOUR_ROUND, avg(DEP_DELAY) AS DELAY FROM heat WHERE FLOOR(DEP_TIME/100) != 24 GROUP BY DAY_OF_WEEK, FLOOR(DEP_TIME/100)");
+	$query = mysql_query("SELECT DAY_OF_WEEK, FLOOR(CRS_DEP_TIME/100) AS HOUR_ROUND, avg(DEP_DELAY) AS DELAY FROM flight_data WHERE FLOOR(CRS_DEP_TIME/100) != 24 GROUP BY DAY_OF_WEEK, FLOOR(CRS_DEP_TIME/100)");
 	$delays = array();
 	for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
 		$row = mysql_fetch_array($query);
@@ -49,5 +49,7 @@ if ($request_type == "plot") {
 } else {
 	echo ("Error");
 }
+
+//mysql_close($con);
 
 ?>

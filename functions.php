@@ -12,12 +12,12 @@ $host = get("host");
 $username = get("username");
 $password = get("password");
 
-$con = mysql_select_db("flights", mysql_connect($host, $username, $password));
+$con = mysql_select_db("kkarpack_flights", mysql_connect($host, $username, $password));
 
 function returnCarriers() {
 	$max = 6; //set max returned
 	//get relevant carriers
-	$getCarriers = mysql_query("SELECT DISTINCT CARRIER FROM prototype LIMIT " . $max);
+	$getCarriers = mysql_query("SELECT DISTINCT CARRIER FROM flight_data LIMIT " . $max);
 	$airlines = array();
 	for ($x = 0, $numrows = mysql_num_rows($getCarriers); $x < $numrows; $x++) {
 		$row = mysql_fetch_array($getCarriers);
@@ -25,4 +25,7 @@ function returnCarriers() {
 	}
 	return $airlines;
 }
+
+//mysql_close($con);
+
 ?>
