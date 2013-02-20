@@ -18,7 +18,7 @@ $(window).load(function() {
 			error: function(response) {
 				console.warn("There was an error receiving your data.");
 				$("#loading").fadeOut(); //ajax loading
-				$("#error").modal(); //launch the error box
+				$("#error").modal(); //launch the error box :)
 			}
 		});
 	});
