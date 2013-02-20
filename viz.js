@@ -114,7 +114,7 @@ function draw(data, flag) {
 			.attr("x", function(d) { return d[0][0] * w; })
 			.attr("y", function(d) { return d[0][1] * h; })
 			.style("fill", function(d) { 
-				var opac = Math.abs(d[1] / 30) < 1 ? Math.abs(d[1] / 30) : 1;
+				var opac = Math.abs(d[1] / 20) < 1 ? Math.abs(d[1] / 20) : 1;
 				var color = d[1] < 0 ? "rgba(0,0,255," + opac + ")" : "rgba(255,0,0," + opac + ")"
 				return color;
 			})
