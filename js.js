@@ -4,10 +4,10 @@ $(window).load(function() {
 		$("#loading").fadeIn(); //ajax loading
 		$("button").removeClass("btn-primary"); //button highlighting
 		$(this).addClass("btn-primary"); //button highlighting
-		$("body svg").fadeOut(function() {this.remove()}); //remove the old viz
-		
-		var type = this.id;
-		var query = "data.php?type=" + type;
+		$("body svg").fadeOut(function() {this.remove();}); //remove the old viz
+
+		var type = this.id,
+            query = "data.php?type=" + type;
 
 		$.ajax({
 			url: query,
@@ -22,7 +22,7 @@ $(window).load(function() {
 			}
 		});
 	});
-	
+
 	//button branching logic needs help
 	$('#controls button').bind("click", function() {
 		var btn = $(this);
@@ -44,7 +44,7 @@ $(window).load(function() {
 			$("circle:not(." + btn.attr("name") + "), path.trend:not(." + btn.attr("name") + ")").fadeOut(); //buggy
 		}
 	});
-	
+
 	//data type toggle on plot
 	$('#controls button.data').bind("click", function() {
 		var type = this.id;
