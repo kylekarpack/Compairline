@@ -11,6 +11,7 @@ $(window).load(function() {
 
 		$.ajax({
 			url: query,
+			isModified: true,
 			dataType: 'json',
 			success: function(response) {
 				draw(response, type);

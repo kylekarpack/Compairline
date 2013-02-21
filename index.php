@@ -12,7 +12,8 @@
 	<!--<link rel="stylesheet" href="style.css">-->
 	<link rel="stylesheet/less" type="text/css" href="style.less">
 	<link rel="stylesheet" href="colors.php">
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.3.3/less.min.js"></script>
+	<link rel="shortcut icon" href="favicon.ico" />
+	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.3/less.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
