@@ -34,7 +34,7 @@ for ($i = 0; $i < count(returnCarriers()); $i++) {
 //returns exqidistant HSL values
 function colorGen($per) {
 	$per =  360 * $per; //HSL colors are WEIRD. 360 wut?
-	return "hsl(" . $per . ", 70%, 65%)";
+	return "hsl(" . $per . ", 90%, 35%)";
 }
 
 $end = microtime(true);

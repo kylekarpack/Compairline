@@ -1,6 +1,8 @@
 <?php
 header('Content-type: application/json'); //set it to return json
 
+$st = microtime(true);
+
 include("functions.php"); //include the credentials grabber function
 $host = get("host");
 $username = get("username");
@@ -18,7 +20,10 @@ if ($request_type == "plot") {
 	//This is a bit hacky. Allows limiting number of airlines to ones in the list
 	//Array to list for SQL query
 	$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'"; //yipes. do this with a join instead?
+	
+	$stSQL = microtime(true);
 	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, CARRIER, avg(DEP_DELAY) as DELAY FROM flight_data " . $airString . " GROUP BY CARRIER, DAY_OF_MONTH;");
+	$endSQL = microtime(true);
 	
 	//create delays array with empty array for each airline
 	foreach ($airlines as $airline) {
@@ -33,7 +38,9 @@ if ($request_type == "plot") {
 	echo ( json_encode($delays) );
 //It's a request for a heat map!!	
 } elseif ($request_type == "heat") { // DO SOMETHING BETTER THAN TRUNCATING 24 values!!!
+	$stSQL = microtime(true);
 	$query = mysql_query("SELECT DAY_OF_WEEK, FLOOR(CRS_DEP_TIME/100) AS HOUR_ROUND, avg(DEP_DELAY) AS DELAY FROM flight_data WHERE FLOOR(CRS_DEP_TIME/100) != 24 GROUP BY DAY_OF_WEEK, FLOOR(CRS_DEP_TIME/100)");
+	$endSQL = microtime(true);
 	$delays = array();
 	for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
 		$row = mysql_fetch_array($query);
@@ -50,6 +57,12 @@ if ($request_type == "plot") {
 	echo ("Error");
 }
 
-//mysql_close($con);
+$end = microtime(true);
 
+$time = round($end - $st, 3);
+$time2 = round($endSQL - $stSQL, 3);
+
+header("Kyle's SQL Query Time: " . $time2 . " seconds");
+header("Kyle's Total Execution Time: " . $time . " seconds");
+//mysql_close($con);
 ?>

@@ -11,6 +11,7 @@
 circle {
 	stroke-width:0;
 	opacity:.5;
+	cursor:default;
 }
 
 rect {
@@ -46,11 +47,32 @@ body, html {
 	margin-right:10px;
 }
 
+.local-data {
+	z-index:999;
+	position:absolute;
+	padding:0 2% 2%;
+	font-size:18px;
+	box-shadow:0 0 10px #ccc;
+	background:#fff;
+	background:rgba(255,255,255,.9);
+	opacity:1;
+	-webkit-transition:opacity .2s ease-in-out;
+	&.hiddenPop {
+		opacity:0;
+	}
+}
+
 #loading {
-	position: absolute;
-	left: 50%;
-	margin-left: -16px;
+	height:100%;
+	width:100%;
+	position:absolute;
+	background:rgba(255,255,255,.8);
 	display:none;
+	img {
+		display:block;
+		margin:0 auto;
+		margin-top:10%;
+	}
 }
 
 label {
@@ -79,6 +101,7 @@ td {
 	position:absolute;
 	left:0;
 	top:0;
+	z-index:10;
 	padding:1%;
 	box-shadow: 0 0 25px #aaa;
 	background:rgba(0,0,0,.6);

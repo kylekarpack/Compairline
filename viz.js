@@ -19,9 +19,7 @@ $(window).resize(function() {
 	
 //Draw function. This is where the money is at
 function draw(data, flag) {
-	$("#loading").fadeOut();
-	$("#controls button").removeAttr("disabled");
-
+	
 	if (flag === "plot") {
 
 		d3.select("body")
@@ -99,7 +97,6 @@ function draw(data, flag) {
 		  .append("g")
 			.attr("transform", "translate(" + margin + "," + margin + ")");
 		
-		console.log(height + margin);
 		var isW = Math.floor($("svg").width() / 25);
 		var isH = Math.floor($("svg").height() / 7);
 		
@@ -147,11 +144,30 @@ function draw(data, flag) {
 	//move it past the controls
 	$("svg").css("margin-left", $("#controls").width() + margin);
 	
+	
 	//TOOLTIPS
-	$("circle").mouseenter(function() {
-		console.log("Delay: " + this.getAttribute("delay"));
-		console.log("Day: " + this.getAttribute("day"));
-		console.log("Airline: " + this.getAttribute("class"));
-	});
+	
+	var localData = d3.select("body")
+        .append("div")
+        .attr("class", "local-data hiddenPop");
+
+    d3.selectAll("circle")
+		.on("mousemove", function(d,i) {
+			var off = $('svg').offset();
+			var mouse = d3.mouse(this);
+			//attributes
+			var delay = Math.round(this.getAttribute("delay") * 10) / 10;
+			var day = this.getAttribute("day");
+			var airline = this.getAttribute("class");
+			//show/hide and data
+			localData
+				.classed("hiddenPop", false)
+				.attr("style", "left:" + mouse[0] + "px;top:" + mouse[1] + "px")
+				.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + airline + "<br /><b>Day: </b>" + day);
+		})
+        //remove them on mouseout
+		.on("mouseout",  function() {
+            localData.classed("hiddenPop", true);
+        });
 
 } //END DRAW

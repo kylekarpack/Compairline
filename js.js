@@ -4,7 +4,6 @@ $(window).load(function() {
 		$("#loading").fadeIn(); //ajax loading
 		$("button").removeClass("btn-primary"); //button highlighting
 		$(this).addClass("btn-primary"); //button highlighting
-		$("body svg").fadeOut(function() {this.remove();}); //remove the old viz
 
 		var type = this.id,
             query = "data.php?type=" + type;
@@ -14,8 +13,12 @@ $(window).load(function() {
 			isModified: true,
 			dataType: 'json',
 			success: function(response) {
+				$("body svg").fadeOut(function() {this.remove();}); //remove the old viz
+				$("#loading").fadeOut();
+				$("#controls button").removeAttr("disabled");
 				draw(response, type);
 			},
+			// error handling
 			error: function(response) {
 				console.warn("There was an error receiving your data.");
 				$("#loading").fadeOut(); //ajax loading
@@ -71,6 +74,6 @@ $(window).load(function() {
 				$("circle").animate({"opacity":1, "stroke-width":4},800);
 			}
 		}
-	});
+	});	
 
 });

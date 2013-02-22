@@ -15,7 +15,7 @@ $password = get("password");
 $con = mysql_select_db("kkarpack_flights", mysql_connect($host, $username, $password));
 
 function returnCarriers() {
-	$max = 6; //set max returned
+	$max = 3; //set max returned
 	//get relevant carriers
 	$getCarriers = mysql_query("SELECT DISTINCT CARRIER FROM flight_data LIMIT " . $max);
 	$airlines = array();
