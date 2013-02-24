@@ -57,9 +57,9 @@ function draw(data, flag) {
 		//this is using invalid attributes. easy, but semantically bad?
 		d3.selectAll("circle")  
 			.attr("cx", function(d){return x_scale(d.day)})
-			.attr("day", function(d){return d.day })
+			.attr("data-day", function(d){return d.day })
 			.attr("cy", function(d){return y_scale(d.delay)})
-			.attr("delay", function(d){return d.delay});
+			.attr("data-delay", function(d){return d.delay});
 		
 		//Create Axes
 		var x_axis  = d3.svg.axis().scale(x_scale);
@@ -153,21 +153,24 @@ function draw(data, flag) {
 
     d3.selectAll("circle")
 		.on("mousemove", function(d,i) {
+			$(this).animate({"stroke-width":"5"}, 200); /* IF DOLPHINS ARE SO SMART, HOW COME THEY LIVE IN IGLOOS? */
+
 			var off = $('svg').offset();
 			var mouse = d3.mouse(this);
 			//attributes
-			var delay = Math.round(this.getAttribute("delay") * 10) / 10;
-			var day = this.getAttribute("day");
+			var delay = Math.round(this.getAttribute("data-delay") * 10) / 10;
+			var day = this.getAttribute("data-day");
 			var airline = this.getAttribute("class");
 			//show/hide and data
 			localData
 				.classed("hiddenPop", false)
-				.attr("style", "left:" + mouse[0] + "px;top:" + mouse[1] + "px")
-				.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + airline + "<br /><b>Day: </b>" + day);
+				.attr("style", "left:" + mouse[0] + "px;top:" + mouse[1] + "px") // Drunk, fix later
+				.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + airline + "<br /><b>Day: </b>" + day)
 		})
         //remove them on mouseout
 		.on("mouseout",  function() {
-            localData.classed("hiddenPop", true);
+			$(this).animate({"stroke-width":0}, 200);
+			localData.classed("hiddenPop", true);
         });
 
 } //END DRAW

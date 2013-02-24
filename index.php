@@ -24,16 +24,16 @@
 	<table>
 	<?php 
 	foreach (returnCarriers() as $airline) { ?>
-			<tr>
-				<td>
-					<label class="<?= $airline ?>">&nbsp;</label>
-					<span><?= $airline ?></span>
-				</td>
-				<td>
-					<button type="button" class="btn airline mute" name="<?= $airline ?>" disabled="disabled">Hide</button>
-					<button type="button" class="btn airline solo" name="<?= $airline ?>" disabled="disabled">Solo</button>
-				</td>
-			</tr>
+		<tr>
+			<td>
+				<label class="<?= $airline ?>">&nbsp;</label>
+				<span><?= $airline ?></span>
+			</td>
+			<td>
+				<button type="button" class="btn airline mute" name="<?= $airline ?>" disabled="disabled">Hide</button>
+				<button type="button" class="btn airline solo" name="<?= $airline ?>" disabled="disabled">Solo</button>
+			</td>
+		</tr>
 	<?php } ?>
 	</table>
 	<hr/>
@@ -46,7 +46,7 @@
 	  <button id="plot" class="btn">Draw me a plot!</button>
 	  <button id="heat" class="btn">Draw me a heatmap!</button>
 	</div>
-	<div id="loading"><img src="ajax-loader.gif"></div>  
+	<div id="loading"><img alt="Loading" src="ajax-loader.gif"></div>  
 	<div id="error" class="modal hide fade" tabindex="-1" role="dialog">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">x</button>
