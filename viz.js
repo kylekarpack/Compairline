@@ -153,7 +153,7 @@ function draw(data, flag) {
 
     d3.selectAll("circle")
 		.on("mousemove", function(d,i) {
-			$(this).animate({"stroke-width":"5"}, 200); /* IF DOLPHINS ARE SO SMART, HOW COME THEY LIVE IN IGLOOS? */
+			$(this).animate({"stroke-width":"5"}, 200);
 
 			var off = $('svg').offset();
 			var mouse = d3.mouse(this);
@@ -164,7 +164,7 @@ function draw(data, flag) {
 			//show/hide and data
 			localData
 				.classed("hiddenPop", false)
-				.attr("style", "left:" + mouse[0] + "px;top:" + mouse[1] + "px") // Drunk, fix later
+				.attr("style", "left:" + mouse[0] + "px;top:" + mouse[1] + "px")
 				.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + airline + "<br /><b>Day: </b>" + day)
 		})
         //remove them on mouseout

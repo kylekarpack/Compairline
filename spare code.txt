@@ -1,0 +1,20 @@
+	<h3>Airline:</h3>
+	<table>
+	<?php 
+	foreach (returnCarriers() as $airline) { ?>
+		<tr>
+			<td>
+				<label class="<?= $airline ?>">&nbsp;</label>
+				<span><?= $airline ?></span>
+			</td>
+			<td>
+				<button type="button" class="btn airline mute" name="<?= $airline ?>" disabled="disabled">Hide</button>
+				<button type="button" class="btn airline solo" name="<?= $airline ?>" disabled="disabled">Solo</button>
+			</td>
+		</tr>
+	<?php } ?>
+	</table>
+	<hr/>
+	<h3>Toggle Data:</h3>
+	<button class="data btn" id="trend">Trend Lines</button>
+	<button class="data btn" id="data">Data Points</button>

@@ -20,33 +20,11 @@
 <body>
 <?php include("functions.php"); ?>
 <div id="controls">
-	<h3>Airline:</h3>
-	<table>
-	<?php 
-	foreach (returnCarriers() as $airline) { ?>
-		<tr>
-			<td>
-				<label class="<?= $airline ?>">&nbsp;</label>
-				<span><?= $airline ?></span>
-			</td>
-			<td>
-				<button type="button" class="btn airline mute" name="<?= $airline ?>" disabled="disabled">Hide</button>
-				<button type="button" class="btn airline solo" name="<?= $airline ?>" disabled="disabled">Solo</button>
-			</td>
-		</tr>
-	<?php } ?>
-	</table>
-	<hr/>
-	<h3>Toggle Data:</h3>
-	<button class="data btn" id="trend">Trend Lines</button>
-	<button class="data btn" id="data">Data Points</button>
+	
+
 </div>
 <div id="viz">
-	<div class="btn-group">
-	  <button id="plot" class="btn">Draw me a plot!</button>
-	  <button id="heat" class="btn">Draw me a heatmap!</button>
-	</div>
-	<div id="loading"><img alt="Loading" src="ajax-loader.gif"></div>  
+	<div id="loading"><img alt="Loading" src="ajax-loader.gif"><h4 style="text-align:center">Sorry for the long loading times!<br />Have a cat:</h2><img src="http://thecatapi.com/api/images/get?format=src&type=gif"></div>  
 	<div id="error" class="modal hide fade" tabindex="-1" role="dialog">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">x</button>

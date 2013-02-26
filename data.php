@@ -62,7 +62,7 @@ $end = microtime(true);
 $time = round($end - $st, 3);
 $time2 = round($endSQL - $stSQL, 3);
 
-header("Kyle's SQL Query Time: " . $time2 . " seconds");
-header("Kyle's Total Execution Time: " . $time . " seconds");
+//header("Kyle's SQL Query Time: " . $time2 . " seconds");
+//header("Kyle's Total Execution Time: " . $time . " seconds");
 //mysql_close($con);
 ?>

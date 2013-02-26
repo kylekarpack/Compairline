@@ -2,7 +2,6 @@
 
 $st = microtime(true);
 
-
 //This file generates a stylesheet for the document based on Airline names
 include("functions.php");
 
@@ -24,7 +23,8 @@ echo("/*Auto-generated colors for each airline*/\n");
 
 // Less random, equidistant color wheel method
 for ($i = 0; $i < count(returnCarriers()); $i++) {
-	$carrier = returnCarriers()[$i];
+	$carrier = returnCarriers();
+	$carrier = $carrier[$i];
 	$c = colorGen($i / count(returnCarriers()));
 	echo ("." . $carrier . " {fill: " . $c . ";}\n");
 	echo ("label." . $carrier . " {background: " . $c . ";}\n");
