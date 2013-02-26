@@ -20,9 +20,31 @@
 <body>
 <?php include("functions.php"); ?>
 <div id="controls">
-	
-
+	<div class="inner">
+	<div class="row-fluid show-grid">
+		<div class="span7">
+			<h1>1. Set Your Parameters</h1>
+		</div>
+		<div class="span4">
+			<h1>2. Select Your Visualization</h1>
+			<div class="btn-group">
+				<button class="btn btn-large type" id="plot">Plot</button>
+				<button class="btn btn-large type" id="heat">Heatmap</button>
+				<button class="btn btn-large type" id="map">Map</button>
+			</div>
+		</div>
+		<div class="span1">
+			<h1>3. Go</h1>
+			<button id="go" class="btn btn-success btn-large" type=button>Go</button>
+		</div>
+	</div>
+	</div>
 </div>
+<div id="handle">
+This is a handle
+</div>
+
+<div class="clear"></div>
 <div id="viz">
 	<div id="loading"><img alt="Loading" src="ajax-loader.gif"><h4 style="text-align:center">Sorry for the long loading times!<br />Have a cat:</h2><img src="http://thecatapi.com/api/images/get?format=src&type=gif"></div>  
 	<div id="error" class="modal hide fade" tabindex="-1" role="dialog">

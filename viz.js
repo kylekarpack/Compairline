@@ -1,12 +1,12 @@
 // dimensions. relative to window size
 // these should be made more robust
-var margin = $(window).width() / 30;
-var width = $(window).width() - 300 - $("#controls").width(); 
-var height = $(window).height() - 150;
+var margin = $(window).width() / 20;
+var width = $(window).width() - 200;
+var height = $(window).height() - $("#controls").height() - 100;
 
 function resize() {
-	margin = $(window).width() / 30;
-	width = $(window).width() - 300 - $("#controls").width();
+	margin = $(window).width() / 20;
+	width = $(window).width() - 200;
 	height = $(window).height() - 150;
 }
 
@@ -25,7 +25,7 @@ function draw(data, flag) {
 		d3.select("body")
 			.append("svg")    
 			.attr("width", width+margin) 
-			.attr("height", height+margin+margin)
+			.attr("height", height+margin)
 		
 		// Takes parameters: data, name of the airline
 		// Does: Draws the CIRCLES ONLY for that airline
@@ -141,9 +141,6 @@ function draw(data, flag) {
 		d3.select(".x.axis").append("text").text("Time").attr("x", function(){return width / 2 }).attr("y", margin); 
 		d3.select(".y.axis").append("text").text("Day of the Week").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", 3 * h - margin).attr("y", 0);		
 	}
-	//move it past the controls
-	$("svg").css("margin-left", $("#controls").width() + margin);
-	
 	
 	//TOOLTIPS
 	
