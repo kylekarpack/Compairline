@@ -36,7 +36,7 @@ $(window).load(function() {
 		
 		$("#controls").slideUp(function() { $("img.tools").fadeIn() });
 		var type = $(".btn-group button.btn-primary")[0].id,
-            query = "data.php?type=" + type;
+            query = "data.php?type=" + type + "&" + $("input").serialize();
 		
 		$("#loading").fadeIn();
 		

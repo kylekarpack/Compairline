@@ -1,28 +1,36 @@
 <?php
 header('Content-type: application/json'); //set it to return json
 
-$st = microtime(true);
+// $st = microtime(true);
 
 include("functions.php"); //include the credentials grabber function
 
-$airlines = returnCarriers();
+//$airlines = returnCarriers();
 
 //find out what type of plot we are returning
 $request_type = $_GET["type"];
 
 if ($request_type == "plot") {
 	$delays = array();
+		
+	$arr = array_keys($_GET);
+	unset($arr[0]);
+	$airstring = "('" . implode("' , '", $arr) . "')";
+	
+	// foreach ($_GET as $key => $value) {
+		// echo $key;
+	// }
 	
 	//This is a bit hacky. Allows limiting number of airlines to ones in the list
 	//Array to list for SQL query
-	$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'"; //yipes. do this with a join instead?
+	//$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'"; //yipes. do this with a join instead?
 	
 	$stSQL = microtime(true);
-	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, CARRIER, avg(DEP_DELAY) as DELAY FROM flight_data " . $airString . " GROUP BY CARRIER, DAY_OF_MONTH;");
+	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, CARRIER, avg(DEP_DELAY) as DELAY FROM flight_data WHERE CARRIER IN " . $airstring . " GROUP BY CARRIER, DAY_OF_MONTH;");
 	$endSQL = microtime(true);
 	
 	//create delays array with empty array for each airline
-	foreach ($airlines as $airline) {
+	foreach ($arr as $airline) {
 		$delays[$airline] = array();
 	}
 	//ineffecient loop. could use help. $x not used
@@ -53,10 +61,10 @@ if ($request_type == "plot") {
 	echo ("Error");
 }
 
-$end = microtime(true);
+// $end = microtime(true);
 
-$time = round($end - $st, 3);
-$time2 = round($endSQL - $stSQL, 3);
+// $time = round($end - $st, 3);
+// $time2 = round($endSQL - $stSQL, 3);
 
 //header("Kyle's SQL Query Time: " . $time2 . " seconds");
 //header("Kyle's Total Execution Time: " . $time . " seconds");

@@ -45,7 +45,7 @@
 			  <div class="dropdown-menu airports">
 				<ul>
 				<?php foreach (returnAirports() as $a) { ?>
-					<li><label class="<?= $a ?> checkbox"><?= $a ?><input type="checkbox" checked="true"></input></label></li>
+					<li><label class="<?= $a ?> checkbox"><?= $a ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
 				<?php } ?>
 				</ul>
 				<a class="btn btn-warning">Reset</a>

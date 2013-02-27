@@ -18,7 +18,7 @@ $max = 3; //set max returned
 
 function returnCarriers() {
 	//get relevant carriers
-	$max = 7;
+	$max = 15;
 	$getCarriers = mysql_query("SELECT DISTINCT CARRIER FROM flight_data LIMIT " . $max);
 	$airlines = array();
 	for ($x = 0, $numrows = mysql_num_rows($getCarriers); $x < $numrows; $x++) {
