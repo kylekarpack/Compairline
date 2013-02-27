@@ -4,10 +4,6 @@ header('Content-type: application/json'); //set it to return json
 $st = microtime(true);
 
 include("functions.php"); //include the credentials grabber function
-$host = get("host");
-$username = get("username");
-$password = get("password");
-$con = mysql_select_db("kkarpack_flights", mysql_connect($host, $username, $password));
 
 $airlines = returnCarriers();
 

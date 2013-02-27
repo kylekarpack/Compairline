@@ -1,13 +1,40 @@
 //THIS IS ALL FRONT END CODE
 $(window).load(function() {
+	
+	$('.dropdown-menu').click(function(event){
+		 event.stopPropagation();
+	 });
+	 
+	 // Attach handler for the "Done" button
+	 $(".dropdown-menu .btn-success").bind("click", function() {
+		$(this).parent().parent().toggleClass("open");
+	 });
+	 
+	 // Handler for the reset button
+	$(".dropdown-menu .btn-warning").bind("click", function() {
+		$(this).parent().find("input").prop("checked",true);
+	 });
+	 
+	// Close menu handler
+	$(".close").bind("click", function() {
+		$("#controls").slideUp(function() { $("img.tools").fadeIn() })
+	});
+	
 	$("#controls .btn-group button").bind("click", function() {
 		$(".btn-group button").removeClass("btn-primary"); //button highlighting
 		$(this).addClass("btn-primary"); //button highlighting
+		$("#go").removeAttr("disabled");
+	});
+	
+	
+	$("img.tools").click(function() {
+		$("#controls").slideDown();
+		$(this).fadeOut();
 	});
 	
 	$("#go").bind("click", function() {
 		
-		$("#controls").slideUp();
+		$("#controls").slideUp(function() { $("img.tools").fadeIn() });
 		var type = $(".btn-group button.btn-primary")[0].id,
             query = "data.php?type=" + type;
 		

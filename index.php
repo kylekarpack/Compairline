@@ -7,7 +7,7 @@
 	<!--<link rel="stylesheet" href="style.css">-->
 	<link rel="stylesheet/less" type="text/css" href="style.less">
 	<link rel="stylesheet" href="colors.php">
-	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" href="favicon.png" />
 	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.3/less.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
@@ -20,10 +20,38 @@
 <body>
 <?php include("functions.php"); ?>
 <div id="controls">
+	<span class="close">&times;</span>
 	<div class="inner">
 	<div class="row-fluid show-grid">
 		<div class="span7">
 			<h1>1. Set Your Parameters</h1>
+			<!-- Airlines Selector -->
+			<div class="btn-group">
+			  <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">Airlines <i class="icon-chevron-down"></i></a>
+			  <div class="dropdown-menu">
+				<ul>
+				<?php foreach (returnCarriers() as $a) { ?>
+					<li><label class="<?= $a ?> checkbox"><?= $a ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
+				<?php } ?>
+				</ul>
+				<a class="btn btn-warning">Reset</a>
+				<a class="btn btn-success">Done</a>
+			  </div>
+			</div>
+			
+			<!-- Airport Selector -->			
+			<div class="btn-group">
+			  <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">Airports <i class="icon-chevron-down"></i></a>
+			  <div class="dropdown-menu airports">
+				<ul>
+				<?php foreach (returnAirports() as $a) { ?>
+					<li><label class="<?= $a ?> checkbox"><?= $a ?><input type="checkbox" checked="true"></input></label></li>
+				<?php } ?>
+				</ul>
+				<a class="btn btn-warning">Reset</a>
+				<a class="btn btn-success">Done</a>
+			  </div>
+			</div>
 		</div>
 		<div class="span4">
 			<h1>2. Select Your Visualization</h1>
@@ -35,14 +63,12 @@
 		</div>
 		<div class="span1">
 			<h1>3. Go</h1>
-			<button id="go" class="btn btn-success btn-large" type=button>Go</button>
+			<button id="go" class="btn btn-success btn-large" type="button" disabled="disabled">Go</button>
 		</div>
 	</div>
 	</div>
 </div>
-<div id="handle">
-This is a handle
-</div>
+<img src="tools.png" class="tools">
 
 <div class="clear"></div>
 <div id="viz">
