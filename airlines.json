@@ -1,0 +1,22 @@
+// airlines
+
+{
+	"DL": "Delta",
+	"UA": "United",
+	"WN": "Southwest",
+	"AA": "American",
+	"US": "US Airways",
+	"B6": "JetBlue",
+	"AS": "Alaska",
+	"WS": "WestJet",
+	"F9": "Frontier",
+	"HA": "Hawaiian",
+	"MQ": "American Eagle",
+	"OO": "SkyWest",
+	"EV": "ExpressJet",
+	"FL": "AirTran",
+	"VX": "Virgin America",
+	"YV": "Mesa",
+	"NK": "Spirit",
+	"G4": "Allegiant"
+}
