@@ -1,5 +1,8 @@
 <?php
 
+// This file contains all functions for PHP and may soon contain a JS api
+
+// Server credentials offline
 function get($param) {
 	$file = file("foobar.config");
 	if ($param == "host") { return trim($file[0]);
@@ -14,8 +17,7 @@ $password = get("password");
 
 $con = mysql_select_db("kkarpack_flights", mysql_connect($host, $username, $password));
 
-$max = 3; //set max returned
-
+// Return an array of carriers
 function returnCarriers() {
 	//get relevant carriers
 	$max = 15;
@@ -28,6 +30,7 @@ function returnCarriers() {
 	return $airlines;
 }
 
+// Return an array of airports
 function returnAirports() {
 	$max = 15;
 	$getAirports = mysql_query("SELECT DISTINCT ORIGIN FROM flight_data LIMIT " . $max);
@@ -38,6 +41,19 @@ function returnAirports() {
 	}
 	return $airports;	
 }
+
+// Return the full name from an abbreviation
+function fullName($abbrev) {
+	$file = file("lookup.json");
+	$json = json_decode($file, true); // true for assoc
+	try {
+		return $json[$abbrev]["name"];
+	} catch {
+		return "";
+	}
+}
+
+echo fullName("AA");
 
 //mysql_close($con);
 
