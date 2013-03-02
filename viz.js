@@ -14,8 +14,6 @@ function resize() {
 $(window).resize(function() {
 	resize();
 });
-
-//END FRONT END CODE
 	
 //Draw function. This is where the money is at
 function draw(data, flag) {
@@ -25,7 +23,7 @@ function draw(data, flag) {
 		d3.select("body")
 			.append("svg")    
 			.attr("width", width+margin) 
-			.attr("height", height+margin)
+			.attr("height", height+margin);
 		
 		// Takes parameters: data, name of the airline
 		// Does: Draws the CIRCLES ONLY for that airline
@@ -37,7 +35,7 @@ function draw(data, flag) {
 					.append("circle")
 						.attr("class", name.toUpperCase())
 						.transition().delay( function(d, i) { return 48 * i; })
-			.attr("r", 3);
+					.attr("r", 3);
 		}
 		
 		//loop through response data and plot it
@@ -54,12 +52,11 @@ function draw(data, flag) {
 		var y_extent = d3.extent(allData, function(d){return d.delay});
 		var y_scale = d3.scale.linear().domain(y_extent).range([height, margin]);
 
-		//this is using invalid attributes. easy, but semantically bad?
 		d3.selectAll("circle")  
 			.attr("cx", function(d){return x_scale(d.day)})
 			.attr("data-day", function(d){return d.day })
 			.attr("cy", function(d){return y_scale(d.delay)})
-			.attr("data-delay", function(d){return d.delay});
+			.attr("data-delay", function(d){return d.delay})
 		
 		//Create Axes
 		var x_axis  = d3.svg.axis().scale(x_scale);
@@ -158,11 +155,18 @@ function draw(data, flag) {
 			var delay = Math.round(this.getAttribute("data-delay") * 10) / 10;
 			var day = this.getAttribute("data-day");
 			var airline = this.getAttribute("class");
-			//show/hide and data
-			localData
-				.classed("hiddenPop", false)
-				.attr("style", "left:" + mouse[0] + "px;top:" + mouse[1] + "px")
-				.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + airline + "<br /><b>Day: </b>" + day)
+			
+			$.ajax({
+				url: 'functions.php',
+				data: {"abbrev":airline},
+				success: function(data) { 
+				//show/hide and data
+					localData
+						.classed("hiddenPop", false)
+						.attr("style", "left:" + mouse[0] + "px;top:" + mouse[1] + "px")
+						.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + data + "<br /><b>Day: </b>" + day)
+				}
+			});
 		})
         //remove them on mouseout
 		.on("mouseout",  function() {

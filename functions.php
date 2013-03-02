@@ -44,17 +44,17 @@ function returnAirports() {
 
 // Return the full name from an abbreviation
 function fullName($abbrev) {
-	$file = file("lookup.json");
+	$file = file_get_contents("airlines.json");
 	$json = json_decode($file, true); // true for assoc
-	try {
-		return $json[$abbrev]["name"];
-	} catch {
-		return "";
-	}
+	return $json[$abbrev];
 }
 
-echo fullName("AA");
+// BEGIN API
 
+// abbreviation to full name API
+if (isset($_GET["abbrev"])) {
+	echo fullName($_GET["abbrev"]);
+}
 //mysql_close($con);
 
 ?>

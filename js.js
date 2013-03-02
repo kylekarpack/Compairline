@@ -1,14 +1,24 @@
 //THIS IS ALL FRONT END CODE
-$(window).load(function() {
+$(document).ready(function() {	
+	$.ajax({
+		url:"colors.php",
+		data: {},
+		success: function(data) {
+			console.log("I werked");
+			$("head").append("<style>TESTTTTTTT" + data + "</style>");
+		}
+	});	
+	
+	$(".slider").dateRangeSlider();
 	
 	$('.dropdown-menu').click(function(event){
 		 event.stopPropagation();
 	 });
 	 
 	 // Attach handler for the "Done" button
-	 $(".dropdown-menu .btn-success").bind("click", function() {
+	$(".dropdown-menu .btn-success").bind("click", function() {
 		$(this).parent().parent().toggleClass("open");
-	 });
+	});
 	 
 	 // Handler for the reset button
 	$(".dropdown-menu .btn-warning").bind("click", function() {

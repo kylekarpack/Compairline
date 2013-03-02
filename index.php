@@ -4,15 +4,16 @@
 	<title>Compairline</title>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css" rel="stylesheet">
-	<!--<link rel="stylesheet" href="style.css">-->
+	<link href="iThing-min.css" rel="stylesheet">
 	<link rel="stylesheet/less" type="text/css" href="style.less">
-	<link rel="stylesheet" href="colors.php">
 	<link rel="shortcut icon" href="favicon.png" />
 	<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.3/less.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
 	<script src="jquery.svgdom.min.js"></script>
+	<script src="jQDateRangeSlider-min.js"></script>
 	<script src="js.js"></script>
 	<script src="viz.js"></script>
 </head>
@@ -31,7 +32,7 @@
 			  <div class="dropdown-menu">
 				<ul>
 				<?php foreach (returnCarriers() as $a) { ?>
-					<li><label class="<?= $a ?> checkbox"><?= $a ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
+					<li><label class="<?= $a ?> checkbox"><?= fullName($a) ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
 				<?php } ?>
 				</ul>
 				<a class="btn btn-warning">Reset</a>
@@ -66,6 +67,8 @@
 			<button id="go" class="btn btn-success btn-large" type="button" disabled="disabled">Go</button>
 		</div>
 	</div>
+		<div class="slider"></div>
+
 	</div>
 </div>
 <img src="tools.png" class="tools">
