@@ -1,15 +1,32 @@
 //THIS IS ALL FRONT END CODE
 $(document).ready(function() {	
+	
+	// deferred load the stylesheet
 	$.ajax({
 		url:"colors.php",
 		data: {},
 		success: function(data) {
-			console.log("I werked");
 			$("head").append("<style>TESTTTTTTT" + data + "</style>");
 		}
 	});	
 	
-	$(".slider").dateRangeSlider();
+	$(".dateSlider").dateRangeSlider({
+		arrows: false,
+		formatter: function(val) {
+			var month = val.getMonth() + 1,
+				year = val.getYear() + 1900;
+			return month + "/" + year;
+		},
+		bounds: {
+				min: new Date(1987, 0, 1),
+				max: new Date(2012, 12, 31)
+				},
+		 defaultValues: {
+				min: new Date(2008, 0, 1),
+				max: new Date(2011, 12, 31)
+				},
+		
+	});
 	
 	$('.dropdown-menu').click(function(event){
 		 event.stopPropagation();

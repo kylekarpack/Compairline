@@ -53,6 +53,10 @@
 				<a class="btn btn-success">Done</a>
 			  </div>
 			</div>
+			<!-- date slider -->
+			<div class="clear"></div>
+			<div class="dateSlider"></div>
+
 		</div>
 		<div class="span4">
 			<h1>2. Select Your Visualization</h1>
@@ -67,8 +71,6 @@
 			<button id="go" class="btn btn-success btn-large" type="button" disabled="disabled">Go</button>
 		</div>
 	</div>
-		<div class="slider"></div>
-
 	</div>
 </div>
 <img src="tools.png" class="tools">

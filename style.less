@@ -5,10 +5,19 @@ h1, h2, h3, h4, .btn, body {
 	font-family:"Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
 }
 
-button, a, .btn, .btn-group, .dropdown-menu {
+// get rid of rounded borders
+.noborder {
 	-webkit-border-radius:0 !important;
 	-moz-order-radius:0 !important;
 	border-radius:0 !important;
+}
+
+.dateSlider .ui-rangeSlider-label, .dateSlider, .ui-rangeSlider-container {
+	.noborder;
+}
+
+button, a, .btn, .btn-group, .dropdown-menu {
+	.noborder;
 	background-image:none;
 }
 
@@ -55,6 +64,19 @@ body, html {
 	-ms-user-select: none;
 	user-select: none;
 }
+
+.dateSlider {
+	.ui-rangeSlider-label {
+		bottom:0;
+		top:0;
+		background:#555;
+		color:#fff;
+		height:100%;
+	}
+	max-width:90%;
+	min-height: 22px;
+	margin:2% 0;
+}	
 
 .checkbox input[type="checkbox"] {
 	margin-left:-10px;
@@ -174,5 +196,4 @@ img.tools {
 	right:3%;
 	top:0;
 	max-width:3%;
-	
 }
