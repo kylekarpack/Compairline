@@ -20,14 +20,13 @@ $(document).ready(function() {
 			return month + " / " + year;
 		},
 		bounds: {
-				min: new Date(1987, 0, 1),
+				min: new Date(2000, 0, 1),
 				max: new Date(2012, 12, 31)
 				},
 		 defaultValues: {
 				min: new Date(2008, 0, 1),
 				max: new Date(2011, 12, 31)
 				},
-		
 	});
 	
 	$('.dropdown-menu').click(function(e) {
@@ -85,9 +84,12 @@ $(document).ready(function() {
 		//stringify airlines
 		var airstring = "";
 		$('#airlines input').each(function () {
-			airstring += "'" + this.name + "'+";
+			if ($(this).prop("checked")) {
+				airstring += "'" + this.name + "'+";
+			}
 		});
 		airstring = airstring.substring(0, airstring.length - 1);
+		
 				
 		$.ajax({
 			// airlines

@@ -1,10 +1,14 @@
 <?php
 header('Content-type: application/json'); //set it to return json
 
-include("functions.php"); //include the credentials grabber function
+require_once("functions.php"); //include the credentials grabber function
 
 //$airlines = returnCarriers();
-
+$startMonth = $_GET["startMonth"];
+$startYear = $_GET["startYear"];
+$endMonth = $_GET["endMonth"];
+$endYear = $_GET["endYear"];
+	
 // return time range
 function timeRange() {
 	// get GET variables
@@ -19,9 +23,13 @@ function timeRange() {
 	return $dayRange;
 }
 
+function floorDate($year, $month) {
+	return 12 * $year + $month;
+}
+
 function granularity() {
 	$days = timeRange();
-	if ($days < 90) {
+	if ($days < 62) {
 		return "DAY_OF_MONTH, MONTH, YEAR";
 	} elseif ($days < 730) {
 		return "MONTH, YEAR";
@@ -43,21 +51,13 @@ if ($request_type == "plot") {
 	$arr = str_replace("'", "", $arr);
 	$arr = explode("+", $arr);
 	
-
-	//$airstring = "('" . implode("' , '", $arr) . "')";
-
-	// foreach ($_GET as $key => $value) {
-		// echo $key;
-	// }
-	
-	//This is a bit hacky. Allows limiting number of airlines to ones in the list
-	//Array to list for SQL query
-	//$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'"; //yipes. do this with a join instead?
-	
 	$stSQL = microtime(true);
 	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY "
 						. "FROM flight_data "
 						. "WHERE CARRIER IN " . $airstring . " "
+						. "AND (12 * YEAR + MONTH) "
+							. "BETWEEN " . floorDate($startYear, $startMonth) . " "
+							. "AND " . floorDate($endYear, $endMonth) . " "
 						. "GROUP BY CARRIER, " . granularity() . " "
 						. "LIMIT 365;");
 	

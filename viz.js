@@ -46,7 +46,10 @@ function draw(data, flag) {
 		}		
 		
 		var x_extent = d3.extent(allData, function(d){return d.date});
-		var x_scale = d3.time.scale().domain(x_extent).range([margin, width]);
+		var x_scale = d3.time
+						.scale()
+						.domain(x_extent)
+						.range([margin, width]);
 		
 		var y_extent = d3.extent(allData, function(d){return d.delay});
 		var y_scale = d3.scale.linear().domain(y_extent).range([height, margin]);
@@ -76,8 +79,18 @@ function draw(data, flag) {
 			.call(y_axis);
 		
 		// axis titles
-		d3.select(".x.axis").append("text").text("Date").attr("x", function(){return width / 2 }).attr("y", margin); 
-		d3.select(".y.axis").append("text").text("Average Delay (Minutes)").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", height / 2 - margin).attr("y", 0);
+		d3.select(".x.axis")
+			.append("text")
+			.text("Date")
+			.attr("x", function(){return width / 2 })
+			.attr("y", margin); 
+		
+		d3.select(".y.axis")
+			.append("text")
+			.text("Average Delay (Minutes)")
+			.attr("transform", "rotate (90, " + -margin + ", 0)")
+			.attr("x", height / 2 - margin)
+			.attr("y", 0);
 		
 		//Paths
 		// var line = d3.svg.line().x(function(d){return x_scale(d.date)}).y(function(d){return y_scale(d.delay)}).interpolate("basis");
@@ -157,7 +170,7 @@ function draw(data, flag) {
 
     d3.selectAll("circle")
 		.on("mousemove", function(d,i) {
-			$(this).animate({"stroke-width":"5"}, 200);
+			//$(this).animate({"stroke-width":"5"}, 200);
 
 			var off = $('svg').offset();
 			var mouse = d3.mouse(this);
@@ -181,7 +194,7 @@ function draw(data, flag) {
 		})
         //remove them on mouseout
 		.on("mouseout",  function() {
-			$(this).animate({"stroke-width":0}, 200);
+			//$(this).animate({"stroke-width":0}, 200);
 			localData.classed("hiddenPop", true);
         });
 

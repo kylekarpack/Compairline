@@ -15,6 +15,9 @@ $username = get("username");
 $password = get("password");
 
 $con = mysql_select_db("kkarpack_flights", mysql_connect($host, $username, $password));
+if (!$con) {
+   die('Could not connect: ' . mysql_error());
+}
 
 // Return an array of carriers
 function returnCarriers() {
@@ -60,6 +63,5 @@ function fullName($abbrev) {
 if (isset($_GET["abbrev"])) {
 	echo fullName($_GET["abbrev"]);
 }
-//mysql_close($con);
 
 ?>

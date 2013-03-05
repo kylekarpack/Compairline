@@ -19,7 +19,7 @@
 </head>
 
 <body>
-<?php include("functions.php"); ?>
+<?php require_once("functions.php"); ?>
 <div id="controls">
 	<span class="close">&times;</span>
 	<div class="inner">

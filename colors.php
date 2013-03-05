@@ -3,7 +3,7 @@
 $st = microtime(true);
 
 //This file generates a stylesheet for the document based on Airline names
-include("functions.php");
+require_once("functions.php");
 
 header("Content-type: text/css");
 

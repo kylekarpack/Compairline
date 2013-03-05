@@ -1,3 +1,7 @@
+WHERE CODE GOES TO DIE
+
+INDEX.PHP
+
 	<h3>Airline:</h3>
 	<table>
 	<?php 
@@ -18,3 +22,17 @@
 	<h3>Toggle Data:</h3>
 	<button class="data btn" id="trend">Trend Lines</button>
 	<button class="data btn" id="data">Data Points</button>
+	
+	
+	
+DATA.PHP
+
+	//$airstring = "('" . implode("' , '", $arr) . "')";
+
+	// foreach ($_GET as $key => $value) {
+		// echo $key;
+	// }
+	
+	//This is a bit hacky. Allows limiting number of airlines to ones in the list
+	//Array to list for SQL query
+	//$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'"; //yipes. do this with a join instead?
