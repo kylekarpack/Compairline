@@ -5,14 +5,14 @@ include("functions.php"); //include the credentials grabber function
 
 //$airlines = returnCarriers();
 
-// get GET variables
-$startMonth = $_GET["startMonth"];
-$startYear = $_GET["startYear"];
-$endMonth = $_GET["endMonth"];
-$endYear = $_GET["endYear"];
-
 // return time range
 function timeRange() {
+	// get GET variables
+	$startMonth = $_GET["startMonth"];
+	$startYear = $_GET["startYear"];
+	$endMonth = $_GET["endMonth"];
+	$endYear = $_GET["endYear"];
+
 	$yearDiff = $endYear - $startYear;
 	$monthDiff = $endMonth - $startMonth;
 	$dayRange = 365 * $yearDiff + 30 * $monthDiff;
@@ -21,7 +21,13 @@ function timeRange() {
 
 function granularity() {
 	$days = timeRange();
-	
+	if ($days < 90) {
+		return "DAY_OF_MONTH, MONTH, YEAR";
+	} elseif ($days < 730) {
+		return "MONTH, YEAR";
+	} else {
+		return "YEAR";
+	}
 }
 
 //find out what type of plot we are returning
@@ -49,7 +55,11 @@ if ($request_type == "plot") {
 	//$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'"; //yipes. do this with a join instead?
 	
 	$stSQL = microtime(true);
-	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY FROM flight_data WHERE CARRIER IN " . $airstring . " GROUP BY CARRIER, DAY_OF_MONTH, MONTH, YEAR;");
+	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY "
+						. "FROM flight_data "
+						. "WHERE CARRIER IN " . $airstring . " "
+						. "GROUP BY CARRIER, " . granularity() . " "
+						. "LIMIT 365;");
 	
 	$endSQL = microtime(true);
 	
@@ -61,7 +71,7 @@ if ($request_type == "plot") {
 	for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
 		$row = mysql_fetch_array($query);
 		$date = mktime(0, 0, 0, (int) $row["MONTH"], (int) $row["DAY_OF_MONTH"], (int) $row["YEAR"]);
-		array_push($delays[$row["CARRIER"]], array("date" => $date, "delay" => (float) $row["DELAY"]));
+		array_push($delays[$row["CARRIER"]], array("date" => (int) $date * 1000, "delay" => (float) $row["DELAY"]));
 	}
 	echo ( json_encode($delays) );
 	

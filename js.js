@@ -82,16 +82,13 @@ $(document).ready(function() {
 		
 		$("#loading").fadeIn();
 		
-		
 		//stringify airlines
 		var airstring = "";
 		$('#airlines input').each(function () {
 			airstring += "'" + this.name + "'+";
 		});
 		airstring = airstring.substring(0, airstring.length - 1);
-		
-		console.log(airstring);
-		
+				
 		$.ajax({
 			// airlines
 			url: "data.php",

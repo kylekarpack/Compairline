@@ -34,8 +34,7 @@ function draw(data, flag) {
 					.enter()
 					.append("circle")
 						.attr("class", name.toUpperCase())
-						.transition().delay( function(d, i) { return 48 * i; })
-					.attr("r", 3);
+						.attr("r", 3);
 		}
 		
 		//loop through response data and plot it
@@ -46,35 +45,46 @@ function draw(data, flag) {
 			allData = allData.concat(data[allKeys[i]]);
 		}		
 		
-		var x_extent = d3.extent(allData, function(d){return d.day});
-		var x_scale = d3.scale.linear().domain(x_extent).range([margin, width]);
+		var x_extent = d3.extent(allData, function(d){return d.date});
+		var x_scale = d3.time.scale().domain(x_extent).range([margin, width]);
 		
 		var y_extent = d3.extent(allData, function(d){return d.delay});
 		var y_scale = d3.scale.linear().domain(y_extent).range([height, margin]);
 
 		d3.selectAll("circle")  
-			.attr("cx", function(d){return x_scale(d.day)})
-			.attr("data-day", function(d){return d.day })
-			.attr("cy", function(d){return y_scale(d.delay)})
-			.attr("data-delay", function(d){return d.delay})
+			.attr("cx", function(d){return x_scale(d.date) })
+			.attr("data-date", function(d){return d.date })
+			.attr("cy", function(d){return y_scale(d.delay) })
+			.attr("data-delay", function(d){return d.delay })
 		
 		//Create Axes
-		var x_axis  = d3.svg.axis().scale(x_scale);
-		d3.select("svg").append("g").attr("class", "x axis").attr("transform", "translate(0," + (height) + ")").call(x_axis);
+		var x_axis = d3.svg.axis()
+					.scale(x_scale)
+		d3.select("svg")
+			.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + (height) + ")")
+			.call(x_axis);
 		
-		var y_axis = d3.svg.axis().scale(y_scale).orient("left");
-		d3.select("svg").append("g").attr("class", "y axis").attr("transform", "translate(" + margin + ", 0 )").call(y_axis);
+		var y_axis = d3.svg.axis()
+					.scale(y_scale)
+					.orient("left");
+		d3.select("svg")
+			.append("g")
+			.attr("class", "y axis")
+			.attr("transform", "translate(" + margin + ", 0 )")
+			.call(y_axis);
 		
-		//axis titles
-		d3.select(".x.axis").append("text").text("Day of January").attr("x", function(){return width / 2 }).attr("y", margin); 
+		// axis titles
+		d3.select(".x.axis").append("text").text("Date").attr("x", function(){return width / 2 }).attr("y", margin); 
 		d3.select(".y.axis").append("text").text("Average Delay (Minutes)").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", height / 2 - margin).attr("y", 0);
 		
 		//Paths
-		var line = d3.svg.line().x(function(d){return x_scale(d.day)}).y(function(d){return y_scale(d.delay)}).interpolate("basis");
+		// var line = d3.svg.line().x(function(d){return x_scale(d.date)}).y(function(d){return y_scale(d.delay)}).interpolate("basis");
 
-		for (var i = 0; i < allKeys.length; i++) {
-			animate(d3.select("svg").append("path").attr("d", line(data[allKeys[i]])).attr("class", allKeys[i] + " trend"));
-		}
+		// for (var i = 0; i < allKeys.length; i++) {
+			// animate(d3.select("svg").append("path").attr("d", line(data[allKeys[i]])).attr("class", allKeys[i] + " trend"));
+		// }
 		
 		//smooth animations (hacky)
 		function animate(path) {
@@ -152,9 +162,10 @@ function draw(data, flag) {
 			var off = $('svg').offset();
 			var mouse = d3.mouse(this);
 			//attributes
-			var delay = Math.round(this.getAttribute("data-delay") * 10) / 10;
-			var day = this.getAttribute("data-day");
-			var airline = this.getAttribute("class");
+			var delay = Math.round(this.getAttribute("data-delay") * 10) / 10,
+				date = new Date(parseInt(this.getAttribute("data-date"))),
+				dateStr = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(),
+				airline = this.getAttribute("class");
 			
 			$.ajax({
 				url: 'functions.php',
@@ -164,7 +175,7 @@ function draw(data, flag) {
 					localData
 						.classed("hiddenPop", false)
 						.attr("style", "left:" + mouse[0] + "px;top:" + mouse[1] + "px")
-						.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + data + "<br /><b>Day: </b>" + day)
+						.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + data + "<br /><b>Date: </b>" + dateStr)
 				}
 			});
 		})
