@@ -6,16 +6,18 @@ $(document).ready(function() {
 		url:"colors.php",
 		data: {},
 		success: function(data) {
-			$("head").append("<style>TESTTTTTTT" + data + "</style>");
+			$("head").append("<style>" + data + "</style>");
 		}
 	});	
 	
+
 	$(".dateSlider").dateRangeSlider({
+		
 		arrows: false,
 		formatter: function(val) {
 			var month = val.getMonth() + 1,
 				year = val.getYear() + 1900;
-			return month + "/" + year;
+			return month + " / " + year;
 		},
 		bounds: {
 				min: new Date(1987, 0, 1),
@@ -28,10 +30,21 @@ $(document).ready(function() {
 		
 	});
 	
-	$('.dropdown-menu').click(function(event){
-		 event.stopPropagation();
+	$('.dropdown-menu').click(function(e) {
+		 e.stopPropagation();
 	 });
 	 
+	 // alt clicking for select only 1
+	 $('.dropdown-menu input').click(function(e) {
+		$(this).parent().toggleClass("noBG");
+
+		if (e.ctrlKey) {
+			// this is really slow
+			$(this).parent().parent().parent().find("input").prop("checked",false).parent().addClass("noBG");
+			$(this).prop("checked",true).parent().removeClass("noBG");
+		}
+	 });
+		
 	 // Attach handler for the "Done" button
 	$(".dropdown-menu .btn-success").bind("click", function() {
 		$(this).parent().parent().toggleClass("open");
@@ -39,7 +52,7 @@ $(document).ready(function() {
 	 
 	 // Handler for the reset button
 	$(".dropdown-menu .btn-warning").bind("click", function() {
-		$(this).parent().find("input").prop("checked",true);
+		$(this).parent().find("input").prop("checked",true).parent().removeClass("noBG");
 	 });
 	 
 	// Close menu handler
@@ -53,22 +66,46 @@ $(document).ready(function() {
 		$("#go").removeAttr("disabled");
 	});
 	
-	
+	// slide down the controls on click
 	$("img.tools").click(function() {
 		$("#controls").slideDown();
 		$(this).fadeOut();
 	});
 	
+	// execute the query with paramaters
 	$("#go").bind("click", function() {
+	
+		var dateSlider = $(".dateSlider");
 		
 		$("#controls").slideUp(function() { $("img.tools").fadeIn() });
-		var type = $(".btn-group button.btn-primary")[0].id,
-            query = "data.php?type=" + type + "&" + $("input").serialize();
+		var type = $(".btn-group button.btn-primary")[0].id;
 		
 		$("#loading").fadeIn();
 		
+		
+		//stringify airlines
+		var airstring = "";
+		$('#airlines input').each(function () {
+			airstring += "'" + this.name + "'+";
+		});
+		airstring = airstring.substring(0, airstring.length - 1);
+		
+		console.log(airstring);
+		
 		$.ajax({
-			url: query,
+			// airlines
+			url: "data.php",
+			data: {
+				// type
+				"type": type,
+				// airlines
+				"airlines":airstring,
+				// date bounds
+				"startMonth": dateSlider.dateRangeSlider("min").getMonth() + 1,
+				"startYear": dateSlider.dateRangeSlider("min").getYear() + 1900,
+				"endMonth": dateSlider.dateRangeSlider("max").getMonth() + 1,
+				"endYear": dateSlider.dateRangeSlider("max").getYear() + 1900,
+			},
 			isModified: true,
 			dataType: 'json',
 			success: function(response) {

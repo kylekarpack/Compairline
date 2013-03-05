@@ -1,4 +1,5 @@
 @border:1px solid #ccc;
+@baseColor:#222;
 
 //typography
 h1, h2, h3, h4, .btn, body {
@@ -10,6 +11,14 @@ h1, h2, h3, h4, .btn, body {
 	-webkit-border-radius:0 !important;
 	-moz-order-radius:0 !important;
 	border-radius:0 !important;
+}
+
+label.noBG {
+	background:none !important;
+	color:@baseColor !important;
+	-webkit-transition:.3s background ease-in-out, .3s color ease-in-out;
+	-moz-transition:.3s background ease-in-out, .3s color ease-in-out;
+	transition:.3s background ease-in-out, .3s color ease-in-out;
 }
 
 .dateSlider .ui-rangeSlider-label, .dateSlider, .ui-rangeSlider-container {
@@ -56,13 +65,22 @@ path {
 body, html {
 	margin:0;
 	padding:0;
-	color:#222;
+	color:@baseColor;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+}
+
+em {
+	color:#999;
+	font-size:16px;
+	margin-left:5%;
+	b {
+		color:@baseColor;
+	}
 }
 
 .dateSlider {
@@ -141,48 +159,52 @@ body, html {
 		font-weight:300;
 	}
 	.btn-group {
-		margin:1% 2%;
+		margin:1% 4% 1% 0;
 		display:block;
 		float:left;
 	}
 	.row-fluid [class*="span"] {
 		border-right:@border;
+		@media (max-width: 767px) {
+			border-right:none;
+			border-bottom:@border;
+		}
 	}
 	.row-fluid .span1 {
 		border:none;
 	}	
 	.dropdown-menu {
-		padding:10%;
-		max-width:1000%;
+		padding:20%;
 		margin:0;
 		background:#fff;
-		ul {
 		overflow:hidden;
-		padding-left:0;
-		margin-left:0;	
+		min-width:600px;
+		ul {
+			overflow:hidden;
+			padding-left:0;
+			margin-left:0;	
+			-webkit-column-count:3;
+			-webkit-column-gap:4%;
+			-webkit-column-rule:1px solid #aaa;
+			-webkit-column-width:150px;
+			list-style:none;
 		}
 		li {
-			display:block;
-			width: 28%;
-			float:left;
-			margin-right:5%;
 			.checkbox input[type="checkbox"] {
 				margin-left:0;
 			}
 		}
 		&.airports label {
-			color:#222;
+			color:@baseColor;
 			border:none;
 			padding:2%;
 		}
 		label {
-			padding:2%;
+			padding:2% 5%;
 			font-weight:700;
 			font-size:18px;
 			color:#fff;
 			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
-			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-			border:1px solid;
 		}
 	}
 }

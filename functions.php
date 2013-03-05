@@ -1,5 +1,4 @@
 <?php
-
 // This file contains all functions for PHP and may soon contain a JS api
 
 // Server credentials offline

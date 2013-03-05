@@ -1,22 +1,45 @@
 <?php
 header('Content-type: application/json'); //set it to return json
 
-// $st = microtime(true);
-
 include("functions.php"); //include the credentials grabber function
 
 //$airlines = returnCarriers();
+
+// get GET variables
+$startMonth = $_GET["startMonth"];
+$startYear = $_GET["startYear"];
+$endMonth = $_GET["endMonth"];
+$endYear = $_GET["endYear"];
+
+// return time range
+function timeRange() {
+	$yearDiff = $endYear - $startYear;
+	$monthDiff = $endMonth - $startMonth;
+	$dayRange = 365 * $yearDiff + 30 * $monthDiff;
+	return $dayRange;
+}
+
+function granularity() {
+	$days = timeRange();
+	
+}
 
 //find out what type of plot we are returning
 $request_type = $_GET["type"];
 
 if ($request_type == "plot") {
 	$delays = array();
-		
-	$arr = array_keys($_GET);
-	unset($arr[0]);
-	$airstring = "('" . implode("' , '", $arr) . "')";
 	
+	$arr = $_GET["airlines"];
+	//for sql query
+	$airstring = "(". str_replace("+", ", ", $arr) . ")";
+	//for output array
+	$arr = str_replace("'", "", $arr);
+	$arr = explode("+", $arr);
+	
+
+	//$airstring = "('" . implode("' , '", $arr) . "')";
+
 	// foreach ($_GET as $key => $value) {
 		// echo $key;
 	// }
@@ -26,7 +49,8 @@ if ($request_type == "plot") {
 	//$airString = "WHERE CARRIER = '" . implode("' OR CARRIER = '", $airlines) . "'"; //yipes. do this with a join instead?
 	
 	$stSQL = microtime(true);
-	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, CARRIER, avg(DEP_DELAY) as DELAY FROM flight_data WHERE CARRIER IN " . $airstring . " GROUP BY CARRIER, DAY_OF_MONTH;");
+	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY FROM flight_data WHERE CARRIER IN " . $airstring . " GROUP BY CARRIER, DAY_OF_MONTH, MONTH, YEAR;");
+	
 	$endSQL = microtime(true);
 	
 	//create delays array with empty array for each airline
@@ -36,10 +60,11 @@ if ($request_type == "plot") {
 	//ineffecient loop. could use help. $x not used
 	for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
 		$row = mysql_fetch_array($query);
-		array_push($delays[$row["CARRIER"]], array("day" => (int) $row["DAY_OF_MONTH"], "delay" => (float) $row["DELAY"]));
+		$date = mktime(0, 0, 0, (int) $row["MONTH"], (int) $row["DAY_OF_MONTH"], (int) $row["YEAR"]);
+		array_push($delays[$row["CARRIER"]], array("date" => $date, "delay" => (float) $row["DELAY"]));
 	}
-	
 	echo ( json_encode($delays) );
+	
 //It's a request for a heat map!!	
 } elseif ($request_type == "heat") { // DO SOMETHING BETTER THAN TRUNCATING 24 values!!!
 	$stSQL = microtime(true);
@@ -60,8 +85,6 @@ if ($request_type == "plot") {
 } else {
 	echo ("Error");
 }
-
-// $end = microtime(true);
 
 // $time = round($end - $st, 3);
 // $time2 = round($endSQL - $stSQL, 3);

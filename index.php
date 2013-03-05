@@ -30,13 +30,14 @@
 			<div class="btn-group">
 			  <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">Airlines <i class="icon-chevron-down"></i></a>
 			  <div class="dropdown-menu">
-				<ul>
+				<ul id="airlines">
 				<?php foreach (returnCarriers() as $a) { ?>
 					<li><label class="<?= $a ?> checkbox"><?= fullName($a) ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
 				<?php } ?>
 				</ul>
 				<a class="btn btn-warning">Reset</a>
 				<a class="btn btn-success">Done</a>
+				<em><b>CTRL + Click</b> to select just one airline</em>
 			  </div>
 			</div>
 			
@@ -44,7 +45,7 @@
 			<div class="btn-group">
 			  <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">Airports <i class="icon-chevron-down"></i></a>
 			  <div class="dropdown-menu airports">
-				<ul>
+				<ul id="airports">
 				<?php foreach (returnAirports() as $a) { ?>
 					<li><label class="<?= $a ?> checkbox"><?= $a ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
 				<?php } ?>
