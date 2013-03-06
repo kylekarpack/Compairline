@@ -34,7 +34,7 @@ function draw(data, flag) {
 					.enter()
 					.append("circle")
 						.attr("class", name.toUpperCase())
-						.attr("r", 3);
+						.attr("r", 4);
 		}
 		
 		//loop through response data and plot it
@@ -67,7 +67,9 @@ function draw(data, flag) {
 			.append("g")
 			.attr("class", "x axis")
 			.attr("transform", "translate(0," + (height) + ")")
-			.call(x_axis);
+			.call(x_axis)
+			.selectAll("text")
+				.attr("text-anchor", null); // align the tick labels
 		
 		var y_axis = d3.svg.axis()
 					.scale(y_scale)
@@ -169,8 +171,9 @@ function draw(data, flag) {
         .attr("class", "local-data hiddenPop");
 
     d3.selectAll("circle")
-		.on("mousemove", function(d,i) {
-			//$(this).animate({"stroke-width":"5"}, 200);
+		.on("mouseover", function(d,i) {
+			$(this).animate({"stroke-width":"6"}, 200);
+			$(this).attr("r", 6);
 
 			var off = $('svg').offset();
 			var mouse = d3.mouse(this);
@@ -194,7 +197,8 @@ function draw(data, flag) {
 		})
         //remove them on mouseout
 		.on("mouseout",  function() {
-			//$(this).animate({"stroke-width":0}, 200);
+			$(this).animate({"stroke-width":0}, 200);
+			$(this).attr("r", 4);
 			localData.classed("hiddenPop", true);
         });
 

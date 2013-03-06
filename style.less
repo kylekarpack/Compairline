@@ -13,6 +13,13 @@ h1, h2, h3, h4, .btn, body {
 	border-radius:0 !important;
 }
 
+.menu {
+	box-shadow: 0 0 25px #aaa;
+	background:rgba(245,245,245,.9);
+	font-weight:700;
+	color:#fff;
+}
+
 label.noBG {
 	background:none !important;
 	color:@baseColor !important;
@@ -138,17 +145,16 @@ em {
 }
 
 #controls {
+	.menu;
 	position:absolute;
 	top:0;
-	box-shadow: 0 0 25px #aaa;
 	width:100%;
 	max-width:100%;
-	background:rgba(245,245,245,.9);
 	.inner {
 		padding:1% 3%;
 	}
 	.close {
-		font-size:20px;
+		font-size:30px;
 		position:absolute;
 		top:1%;
 		right:1%;
@@ -209,7 +215,24 @@ em {
 	}
 }
 
+
+//PUT THIS IN A CLASS!!
+#brushing {
+	.menu;
+	width:20%;
+	max-width:200px;
+	position:fixed;
+	right:0;
+	top:20%;
+	padding:2%;
+	ul {
+		list-style:none;
+		margin:0;
+	}
+}
+
 img.tools {
+	cursor:pointer;
 	display:none;
 	border-bottom:@border;
 	border-left:@border;
@@ -217,5 +240,6 @@ img.tools {
 	position:absolute;
 	right:3%;
 	top:0;
-	max-width:3%;
+	max-width:5%;
+	box-shadow:0 0 10px #ccc;
 }

@@ -10,9 +10,8 @@ $(document).ready(function() {
 		}
 	});	
 	
-
-	$(".dateSlider").dateRangeSlider({
-		
+	// construct date range slider
+	$(".dateSlider").dateRangeSlider({	
 		arrows: false,
 		formatter: function(val) {
 			var month = val.getMonth() + 1,
@@ -25,19 +24,20 @@ $(document).ready(function() {
 				},
 		 defaultValues: {
 				min: new Date(2008, 0, 1),
-				max: new Date(2011, 12, 31)
+				max: new Date(2012, 12, 31)
 				},
 	});
 	
+	// prevent default behavior (important!)
 	$('.dropdown-menu').click(function(e) {
 		 e.stopPropagation();
 	 });
 	 
-	 // alt clicking for select only 1
+	 // alt clicking for selecting only 1
 	 $('.dropdown-menu input').click(function(e) {
 		$(this).parent().toggleClass("noBG");
 
-		if (e.ctrlKey) {
+		if (e.ctrlKey || e.altKey) {
 			// this is really slow
 			$(this).parent().parent().parent().find("input").prop("checked",false).parent().addClass("noBG");
 			$(this).prop("checked",true).parent().removeClass("noBG");
@@ -56,19 +56,19 @@ $(document).ready(function() {
 	 
 	// Close menu handler
 	$(".close").bind("click", function() {
-		$("#controls").slideUp(function() { $("img.tools").fadeIn() })
-	});
-	
-	$("#controls .btn-group button").bind("click", function() {
-		$(".btn-group button").removeClass("btn-primary"); //button highlighting
-		$(this).addClass("btn-primary"); //button highlighting
-		$("#go").removeAttr("disabled");
+		$("#controls").slideUp(function() { $("img.tools").slideDown() })
 	});
 	
 	// slide down the controls on click
 	$("img.tools").click(function() {
 		$("#controls").slideDown();
 		$(this).fadeOut();
+	});
+	
+	$("#controls .btn-group button").bind("click", function() {
+		$(".btn-group button").removeClass("btn-primary"); //button highlighting
+		$(this).addClass("btn-primary"); //button highlighting
+		$("#go").removeAttr("disabled");
 	});
 	
 	// execute the query with paramaters
@@ -81,15 +81,7 @@ $(document).ready(function() {
 		
 		$("#loading").fadeIn();
 		
-		//stringify airlines
-		var airstring = "";
-		$('#airlines input').each(function () {
-			if ($(this).prop("checked")) {
-				airstring += "'" + this.name + "'+";
-			}
-		});
-		airstring = airstring.substring(0, airstring.length - 1);
-		
+		var airstring = kyleSerialize($('#airlines input'));		
 				
 		$.ajax({
 			// airlines
@@ -120,7 +112,8 @@ $(document).ready(function() {
 			}
 		});
 	});
-
+	
+	
 	//button branching logic needs help
 	// $('#controls button').bind("click", function() {
 		// var btn = $(this);
@@ -171,3 +164,15 @@ $(document).ready(function() {
 	// });	
 
 });
+
+//stringify airlines (hacky alternative to passing two arrays to the api)
+//a special serialization technique to separate airlines
+function kyleSerialize(inputs) {	
+	var airstring = "";
+	inputs.each(function () {
+		if ($(this).prop("checked")) {
+			airstring += "'" + this.name + "'+";
+		}
+	});
+	return airstring.substring(0, airstring.length - 1);
+}

@@ -20,6 +20,13 @@
 
 <body>
 <?php require_once("functions.php"); ?>
+<div id="brushing">
+	<ul>
+	<?php foreach (returnCarriers() as $a) { ?>
+		<li><label class="<?= $a ?> checkbox"><?= fullName($a) ?></label></li>
+	<?php } ?>
+	<ul>
+</div>
 <div id="controls">
 	<span class="close">&times;</span>
 	<div class="inner">
@@ -74,11 +81,16 @@
 	</div>
 	</div>
 </div>
-<img src="tools.png" class="tools">
+<img src="drop.png" class="tools">
 
 <div class="clear"></div>
 <div id="viz">
-	<div id="loading"><img alt="Loading" src="ajax-loader.gif"><h4 style="text-align:center">Sorry for the long loading times!<br />Have a cat:</h2><img src="http://thecatapi.com/api/images/get?format=src&type=gif"></div>  
+	<div id="loading">
+		<img alt="Loading" src="ajax-loader.gif">
+		<h3 style="text-align:center">Processing <?= number_format(mysql_fetch_assoc(mysql_query("SELECT count(CARRIER) as total FROM flight_data"))["total"]) ?> rows of data.</h3>
+		<h4 style="text-align:center">Sorry for the long loading times!<br />Have a cat:</h2>
+		<img src="http://thecatapi.com/api/images/get?format=src&type=gif">
+	</div>  
 	<div id="error" class="modal hide fade" tabindex="-1" role="dialog">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">x</button>
@@ -93,5 +105,14 @@
 		</div>
 	</div>
 </div>
+
+<div id="table">
+	<table class="table table-striped table-hover">
+		<tr>
+			<th>Date</th><th>Airline</th><th>Delay</th>
+		</tr>
+	</table>
+</div>
+
 </body>
 </html>

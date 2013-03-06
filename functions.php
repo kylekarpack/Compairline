@@ -1,5 +1,6 @@
 <?php
-// This file contains all functions for PHP and may soon contain a JS api
+// This file contains all utility functions for PHP
+// It also contains an API for some JavaScript functions
 
 // Server credentials offline
 function get($param) {

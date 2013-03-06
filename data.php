@@ -1,7 +1,7 @@
 <?php
 header('Content-type: application/json'); //set it to return json
 
-require_once("functions.php"); //include the credentials grabber function
+require_once("functions.php"); //include the credentials grabber function and others
 
 //$airlines = returnCarriers();
 $startMonth = $_GET["startMonth"];
@@ -30,8 +30,18 @@ function floorDate($year, $month) {
 function granularity() {
 	$days = timeRange();
 	if ($days < 62) {
-		return "DAY_OF_MONTH, MONTH, YEAR";
+		return "day";
 	} elseif ($days < 730) {
+		return "month";
+	} else {
+		return "year";
+	}
+}
+
+function filterString() {
+	if (granularity() == "day") {
+		return "DAY_OF_MONTH, MONTH, YEAR";
+	} elseif (granularity() == "month") {
 		return "MONTH, YEAR";
 	} else {
 		return "YEAR";
@@ -58,7 +68,7 @@ if ($request_type == "plot") {
 						. "AND (12 * YEAR + MONTH) "
 							. "BETWEEN " . floorDate($startYear, $startMonth) . " "
 							. "AND " . floorDate($endYear, $endMonth) . " "
-						. "GROUP BY CARRIER, " . granularity() . " "
+						. "GROUP BY CARRIER, " . filterString() . " "
 						. "LIMIT 365;");
 	
 	$endSQL = microtime(true);
@@ -71,7 +81,7 @@ if ($request_type == "plot") {
 	for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
 		$row = mysql_fetch_array($query);
 		$date = mktime(0, 0, 0, (int) $row["MONTH"], (int) $row["DAY_OF_MONTH"], (int) $row["YEAR"]);
-		array_push($delays[$row["CARRIER"]], array("date" => (int) $date * 1000, "delay" => (float) $row["DELAY"]));
+		array_push($delays[$row["CARRIER"]], array("date" => (int) $date * 1000, "delay" => round((float) $row["DELAY"], 2))); // rounding delays for compression over network
 	}
 	echo ( json_encode($delays) );
 	
