@@ -1,9 +1,11 @@
 @border:1px solid #ccc;
 @baseColor:#222;
+@baseFontSize:16px;
 
 //typography
 h1, h2, h3, h4, .btn, body {
 	font-family:"Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
+	font-size:@baseFontSize;
 }
 
 // get rid of rounded borders
@@ -65,7 +67,6 @@ path {
 }
 
 .title {
-	font-size:16px;
 	font-weight:700;
 }
 
@@ -83,7 +84,6 @@ body, html {
 
 em {
 	color:#999;
-	font-size:16px;
 	margin-left:5%;
 	b {
 		color:@baseColor;
@@ -144,20 +144,24 @@ em {
 	opacity:0;
 }
 
+.close, .closeLeft {
+	color:#222;
+	font-size:30px;
+	position:absolute;
+	top:1%;
+	right:1%;
+	cursor:pointer;
+}
+
 #controls {
 	.menu;
+	color:@baseColor;
 	position:absolute;
 	top:0;
 	width:100%;
 	max-width:100%;
 	.inner {
 		padding:1% 3%;
-	}
-	.close {
-		font-size:30px;
-		position:absolute;
-		top:1%;
-		right:1%;
 	}
 	h1 {
 		margin-top:0;
@@ -215,31 +219,47 @@ em {
 	}
 }
 
+img.tools {
+	cursor:pointer;
+	display:none;
+	position:absolute;
+	right:3%;
+	box-shadow:0 0 10px #ccc;
+	max-width:5%;
+	&.top {
+		top:0;
+	}
+	&.bottom {
+		bottom:0;
+	}
+}
 
-//PUT THIS IN A CLASS!!
 #brushing {
 	.menu;
+	display:none;
 	width:20%;
 	max-width:200px;
 	position:fixed;
 	right:0;
-	top:20%;
-	padding:2%;
+	top:15%;
+	padding:15px;
 	ul {
 		list-style:none;
 		margin:0;
 	}
 }
 
-img.tools {
-	cursor:pointer;
+#table {
+	.noborder;
+	.menu;
 	display:none;
-	border-bottom:@border;
-	border-left:@border;
-	border-right:@border;
 	position:absolute;
-	right:3%;
-	top:0;
-	max-width:5%;
-	box-shadow:0 0 10px #ccc;
+	bottom:0;
+	width:100%;
+	margin:0 auto;
+	table {
+		width:80%;
+		margin:0 auto;
+		padding:2%;
+	}
 }

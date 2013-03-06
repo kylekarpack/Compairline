@@ -20,6 +20,9 @@ function draw(data, flag) {
 	
 	if (flag === "plot") {
 
+		// show brushing
+		$("#brushing").show("slide", { direction: "right" }, 500);
+
 		d3.select("body")
 			.append("svg")    
 			.attr("width", width+margin) 
@@ -27,7 +30,8 @@ function draw(data, flag) {
 		
 		// Takes parameters: data, name of the airline
 		// Does: Draws the CIRCLES ONLY for that airline
-		function graphAirline(data, name) {			
+		function graphAirline(data, name) {	
+			//draw pounts
 			d3.select("svg")
 				.selectAll("circle." + name)
 					.data(data) 
@@ -37,12 +41,34 @@ function draw(data, flag) {
 						.attr("r", 4);
 		}
 		
+		// wipe table in prep
+		var table = $("#table table");
+		table.children().remove();
+		table.append("<tr><th>Date</th><th>Airline</th><th>Delay</th></tr>");
+		function populateTable(data, name) {
+			// append header row
+			try {
+				var d = new Date(data[0].date);
+				dateStr = d.getMonth() + 1 + "/" + d.getDate() + "/" + parseInt(d.getYear() + 1900);
+				//populate table
+				table.append("<tr><td>" + 
+										dateStr + 
+										"</td><td>" + name.toUpperCase() + 
+										"</td><td>" + data[0].delay + 
+										"</td></tr>");
+			} catch(err) {
+				// remove this line for production
+				console.warn("Empty object passed, accessing its fields yielded a: " + err);
+			}
+		}
+		
 		//loop through response data and plot it
 		var allKeys = Object.keys(data);
 		var allData = new Array();
 		for (var i = 0; i < allKeys.length; i++) {
+			populateTable(data[allKeys[i]], allKeys[i].toLowerCase());
 			graphAirline(data[allKeys[i]], allKeys[i].toLowerCase());
-			allData = allData.concat(data[allKeys[i]]);
+			allData = allData.concat(data[allKeys[i]]);			
 		}		
 		
 		var x_extent = d3.extent(allData, function(d){return d.date});
@@ -52,7 +78,10 @@ function draw(data, flag) {
 						.range([margin, width]);
 		
 		var y_extent = d3.extent(allData, function(d){return d.delay});
-		var y_scale = d3.scale.linear().domain(y_extent).range([height, margin]);
+		var y_scale = d3.scale
+						.linear()
+						.domain(y_extent)
+						.range([height, margin]);
 
 		d3.selectAll("circle")  
 			.attr("cx", function(d){return x_scale(d.date) })
@@ -80,7 +109,7 @@ function draw(data, flag) {
 			.attr("transform", "translate(" + margin + ", 0 )")
 			.call(y_axis);
 		
-		// axis titles
+		// Axis titles
 		d3.select(".x.axis")
 			.append("text")
 			.text("Date")

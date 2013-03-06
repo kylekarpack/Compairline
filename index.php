@@ -20,13 +20,16 @@
 
 <body>
 <?php require_once("functions.php"); ?>
+
 <div id="brushing">
+	<span class="closeLeft">&times;</span>
 	<ul>
 	<?php foreach (returnCarriers() as $a) { ?>
 		<li><label class="<?= $a ?> checkbox"><?= fullName($a) ?></label></li>
 	<?php } ?>
 	<ul>
 </div>
+
 <div id="controls">
 	<span class="close">&times;</span>
 	<div class="inner">
@@ -81,7 +84,7 @@
 	</div>
 	</div>
 </div>
-<img src="drop.png" class="tools">
+<img src="drop.png" class="tools top">
 
 <div class="clear"></div>
 <div id="viz">
@@ -106,11 +109,12 @@
 	</div>
 </div>
 
+<img src="table.png" class="tools bottom">
+
 <div id="table">
-	<table class="table table-striped table-hover">
-		<tr>
-			<th>Date</th><th>Airline</th><th>Delay</th>
-		</tr>
+	<span class="close">&times;</span>
+	<table class="table table-striped table-hover table-bordered table-condensed">
+		
 	</table>
 </div>
 

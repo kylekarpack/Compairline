@@ -56,12 +56,25 @@ $(document).ready(function() {
 	 
 	// Close menu handler
 	$(".close").bind("click", function() {
-		$("#controls").slideUp(function() { $("img.tools").slideDown() })
+		$(this).parent().slideUp(function() { $("img.tools").fadeIn() })
+		$("#brushing").show("slide", { direction: "right" }, 500);		
+	});
+	
+	
+	$(".closeLeft").bind("click", function() {
+		$(this).parent().hide("slide", { direction: "right" }, 500);
 	});
 	
 	// slide down the controls on click
-	$("img.tools").click(function() {
+	$("img.tools.top").click(function() {
 		$("#controls").slideDown();
+		$("#brushing").hide("slide", {direction: "right"}, 500);
+		$(this).fadeOut();
+	});
+	
+	$("img.tools.bottom").click(function() {
+		$("#table").show("slide", {direction: "down"}, 500);
+		$("#brushing").hide("slide", {direction: "right"}, 500);		
 		$(this).fadeOut();
 	});
 	
@@ -76,7 +89,9 @@ $(document).ready(function() {
 	
 		var dateSlider = $(".dateSlider");
 		
-		$("#controls").slideUp(function() { $("img.tools").fadeIn() });
+		$("#controls").slideUp(function() { 
+			$("img.tools").fadeIn();
+		});
 		var type = $(".btn-group button.btn-primary")[0].id;
 		
 		$("#loading").fadeIn();
@@ -112,57 +127,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-	
-	
-	//button branching logic needs help
-	// $('#controls button').bind("click", function() {
-		// var btn = $(this);
-		// if (btn.hasClass("mute")) { //if it's a do one button
-			// if (btn.hasClass("hid")) {
-				// btn.toggleClass("hid").toggleClass("btn-danger");
-			// } else {
-				// btn.toggleClass("hid").toggleClass("btn-danger");
-			// }
-			// $("circle." + btn.attr("name") + ", path." + btn.attr("name")).fadeToggle();
-			// console.log("circle." + btn.attr("name") + ", path." + btn.attr("name"));
-		// } else if (btn.hasClass("solo")) { //it's a "toggle others" button ("solo")
-			// if (btn.hasClass("hid")) {
-				// btn.toggleClass("hid").toggleClass("btn-warning");
-			// } else {
-				// btn.toggleClass("hid").toggleClass("btn-warning");
-				// $("circle." + btn.attr("name") + ", path." + btn.attr("name")).fadeIn();
-			// }
-			// $("circle:not(." + btn.attr("name") + "), path.trend:not(." + btn.attr("name") + ")").fadeOut(); //buggy
-		// }
-	// });
-
-	//data type toggle on plot
-	// $('#controls button.data').bind("click", function() {
-		// var type = this.id;
-		// if (type === "data") { //data points
-			// if ($(this).hasClass("hid")) {
-				// $(this).toggleClass("hid").toggleClass("btn-danger");
-				// $("circle").fadeIn(800);
-				// $("path.trend").animate({"stroke-width":2},1000);
-
-			// } else {
-				// $(this).toggleClass("hid").toggleClass("btn-danger");
-				// $("circle").fadeOut(800);
-				// $("path.trend").animate({"stroke-width":3},1000);
-			// }
-		// } else { //trend lines
-			// if ($(this).hasClass("hid")) {
-				// $(this).toggleClass("hid").toggleClass("btn-danger");
-				// $("path.trend").fadeIn(800);
-				// $("circle").animate({"opacity":.5, "stroke-width":0},800);
-			// } else {
-				// $(this).toggleClass("hid").toggleClass("btn-danger");
-				// $("path.trend").fadeOut(800);
-				// $("circle").animate({"opacity":1, "stroke-width":4},800);
-			// }
-		// }
-	// });	
-
 });
 
 //stringify airlines (hacky alternative to passing two arrays to the api)
