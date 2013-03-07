@@ -118,7 +118,7 @@ $(document).ready(function() {
 			isModified: true,
 			dataType: 'json',
 			success: function(response) {
-				$("body svg").fadeOut(function() {this.remove();}); //remove the old viz
+				//$("body svg").fadeOut(function() {this.remove();}); //remove the old viz. Deprecated for new UI!
 				$("#loading").fadeOut();
 				draw(response, type);
 			},

@@ -1,38 +1,49 @@
 // dimensions. relative to window size
 // these should be made more robust
 var margin = $(window).width() / 20;
-var width = $(window).width() - 200;
-var height = $(window).height() - $("#controls").height() - 100;
+var width = $(window).width() - margin * 5;
+var height = $(window).height() - 150;
+var count = 0; // track the number of vizualizations asked for
 
-function resize() {
-	margin = $(window).width() / 20;
-	width = $(window).width() - 200;
-	height = $(window).height() - 150;
-}
 
-//LOOK HERE: http://stackoverflow.com/questions/9400615/whats-the-best-way-to-make-a-d3-js-visualisation-layout-responsive
-$(window).resize(function() {
-	resize();
+// Implemented but buggy
+$(window).on("resize", function() {
+	var chart = $("svg");
+	if (chart.length !== 0) {
+		margin = $(window).width() / 20;
+		width = $(window).width() - margin * 5;
+		height = $(window).height() - 150;
+		chart.attr("width", width+margin);
+		chart.attr("height", height+margin);
+	}
 });
 	
 //Draw function. This is where the money is at
 function draw(data, flag) {
+	count++;
 	
 	if (flag === "plot") {
 
 		// show brushing
 		$("#brushing").show("slide", { direction: "right" }, 500);
 
-		d3.select("body")
-			.append("svg")    
+		//.append('<li><a href="#tab"' + count + ' data-toggle="tab">Viz ' + count + '</a></li>')
+
+		d3.select("#vizualization")
+			.append("svg")
+			.attr("class", "viz" + count)
 			.attr("width", width+margin) 
-			.attr("height", height+margin);
+			.attr("height", height+margin)
+			.attr("viewBox", "0 0 " + width + " " + height)
+			.attr("preserveAspectRatio", "xMidYMid");
 		
+		
+		var svg = d3.select("svg.viz" + count);
 		// Takes parameters: data, name of the airline
 		// Does: Draws the CIRCLES ONLY for that airline
 		function graphAirline(data, name) {	
 			//draw pounts
-			d3.select("svg")
+			svg
 				.selectAll("circle." + name)
 					.data(data) 
 					.enter()
@@ -92,7 +103,7 @@ function draw(data, flag) {
 		//Create Axes
 		var x_axis = d3.svg.axis()
 					.scale(x_scale)
-		d3.select("svg")
+		svg
 			.append("g")
 			.attr("class", "x axis")
 			.attr("transform", "translate(0," + (height) + ")")
@@ -103,7 +114,7 @@ function draw(data, flag) {
 		var y_axis = d3.svg.axis()
 					.scale(y_scale)
 					.orient("left");
-		d3.select("svg")
+		svg
 			.append("g")
 			.attr("class", "y axis")
 			.attr("transform", "translate(" + margin + ", 0 )")

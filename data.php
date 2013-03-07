@@ -4,6 +4,7 @@ header('Content-type: application/json'); //set it to return json
 require_once("functions.php"); //include the credentials grabber function and others
 
 //$airlines = returnCarriers();
+// should be make more robust to include validation
 $startMonth = $_GET["startMonth"];
 $startYear = $_GET["startYear"];
 $endMonth = $_GET["endMonth"];

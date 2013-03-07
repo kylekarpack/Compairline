@@ -89,7 +89,7 @@
 <div class="clear"></div>
 
 <!-- ACCORDION HERE? -->
-<div id="viz">
+<div id="info">
 	<div id="loading">
 		<img alt="Loading" src="ajax-loader.gif">
 		<h3 style="text-align:center">Processing <?= number_format(mysql_fetch_assoc(mysql_query("SELECT count(CARRIER) as total FROM flight_data"))["total"]) ?> rows of data.</h3>
@@ -109,6 +109,12 @@
 			<button class="btn btn-primary" data-dismiss="modal">Close</button>
 		</div>
 	</div>
+</div>
+
+<div id="vizualization">
+	<ul class="nav nav-tabs">
+	</ul>
+	<div class="tab-content"></div>
 </div>
 
 <img src="table.png" class="tools bottom">
