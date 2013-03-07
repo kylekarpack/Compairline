@@ -25,7 +25,7 @@
 	<span class="closeLeft">&times;</span>
 	<ul>
 	<?php foreach (returnCarriers() as $a) { ?>
-		<li><label class="<?= $a ?> checkbox"><?= fullName($a) ?></label></li>
+		<li><label class="<?= $a ?>"><?= fullName($a) ?></label></li>
 	<?php } ?>
 	<ul>
 </div>
@@ -87,6 +87,8 @@
 <img src="drop.png" class="tools top">
 
 <div class="clear"></div>
+
+<!-- ACCORDION HERE? -->
 <div id="viz">
 	<div id="loading">
 		<img alt="Loading" src="ajax-loader.gif">

@@ -16,7 +16,7 @@ $(document).ready(function() {
 		formatter: function(val) {
 			var month = val.getMonth() + 1,
 				year = val.getYear() + 1900;
-			return month + " / " + year;
+			return month + "/" + year;
 		},
 		bounds: {
 				min: new Date(2000, 0, 1),
@@ -36,11 +36,13 @@ $(document).ready(function() {
 	 // alt clicking for selecting only 1
 	 $('.dropdown-menu input').click(function(e) {
 		$(this).parent().toggleClass("noBG");
-
+		var cl = $(this).attr("name").toUpperCase();
 		if (e.ctrlKey || e.altKey) {
-			// this is really slow
 			$(this).parent().parent().parent().find("input").prop("checked",false).parent().addClass("noBG");
 			$(this).prop("checked",true).parent().removeClass("noBG");
+			$("#brushing label").not("." + cl).toggle();			
+		} else {
+			$("#brushing label." + cl).toggle();
 		}
 	 });
 		
@@ -52,6 +54,7 @@ $(document).ready(function() {
 	 // Handler for the reset button
 	$(".dropdown-menu .btn-warning").bind("click", function() {
 		$(this).parent().find("input").prop("checked",true).parent().removeClass("noBG");
+		$("#brushing label").show();
 	 });
 	 
 	// Close menu handler
