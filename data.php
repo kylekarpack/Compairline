@@ -4,7 +4,6 @@ header('Content-type: application/json'); //set it to return json
 require_once("functions.php"); //include the credentials grabber function and others
 
 //$airlines = returnCarriers();
-// should be make more robust to include validation
 $startMonth = $_GET["startMonth"];
 $startYear = $_GET["startYear"];
 $endMonth = $_GET["endMonth"];
@@ -61,7 +60,7 @@ if ($request_type == "plot") {
 	//for output array
 	$arr = str_replace("'", "", $arr);
 	$arr = explode("+", $arr);
-	
+		
 	$stSQL = microtime(true);
 	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY "
 						. "FROM flight_data "
@@ -73,7 +72,6 @@ if ($request_type == "plot") {
 						. "LIMIT 365;");
 	
 	$endSQL = microtime(true);
-	
 	//create delays array with empty array for each airline
 	foreach ($arr as $airline) {
 		$delays[$airline] = array();

@@ -81,11 +81,12 @@ $(document).ready(function() {
 		$(this).fadeOut();
 	});
 	
-	$("#controls .btn-group button").bind("click", function() {
-		$(".btn-group button").removeClass("btn-primary"); //button highlighting
-		$(this).addClass("btn-primary"); //button highlighting
-		$("#go").removeAttr("disabled");
-	});
+	// Deprecated
+	// $("#controls .btn-group button").bind("click", function() {
+		// $(".btn-group button").removeClass("btn-primary"); //button highlighting
+		// $(this).addClass("btn-primary"); //button highlighting
+		// $("#go").removeAttr("disabled");
+	// });
 	
 	// execute the query with paramaters
 	$(".btn-group button").bind("click", function() {

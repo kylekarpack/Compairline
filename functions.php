@@ -1,6 +1,5 @@
 <?php
 // This file contains all utility functions for PHP
-// It also contains an API for some JavaScript functions
 
 // Server credentials offline
 function get($param) {
@@ -41,13 +40,18 @@ function returnCarriers() {
 
 // Return an array of airports
 function returnAirports() {
-	$max = 15;
-	$getAirports = mysql_query("SELECT DISTINCT ORIGIN FROM flight_data LIMIT " . $max);
-	$airports = array();
-	for ($x = 0, $numrows = mysql_num_rows($getAirports); $x < $numrows; $x++) {
-		$row = mysql_fetch_array($getAirports);
-		$airports[] = $row[0];
-	}
+	// $max = 15;
+	// $getAirports = mysql_query("SELECT DISTINCT ORIGIN FROM flight_data LIMIT " . $max);
+	// $airports = array();
+	// for ($x = 0, $numrows = mysql_num_rows($getAirports); $x < $numrows; $x++) {
+		// $row = mysql_fetch_array($getAirports);
+		// $airports[] = $row[0];
+	// }
+	$file = utf8_decode(file_get_contents("airports.json"));
+	$json = json_decode($file, true); // true for assoc
+	$airports = array_keys($json);
+	$airports = array_slice($airports, 0 , 15);
+	
 	return $airports;	
 }
 

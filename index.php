@@ -90,7 +90,7 @@
 <div id="info">
 	<div id="loading">
 		<img alt="Loading" src="ajax-loader.gif">
-		<h3 style="text-align:center">Processing <?= number_format(mysql_fetch_assoc(mysql_query("SELECT count(CARRIER) as total FROM flight_data"))["total"]) ?> rows of data.</h3>
+		<h3 style="text-align:center">Processing <!-- number_format(mysql_fetch_assoc(mysql_query("SELECT count(CARRIER) as total FROM flight_data"))["total"]) --> rows of data.</h3>
 		<h4 style="text-align:center">Sorry for the long loading times!<br />Have a cat:</h2>
 		<img src="http://thecatapi.com/api/images/get?format=src&type=gif">
 	</div>  
