@@ -88,14 +88,14 @@ $(document).ready(function() {
 	});
 	
 	// execute the query with paramaters
-	$("#go").bind("click", function() {
+	$(".btn-group button").bind("click", function() {
 	
 		var dateSlider = $(".dateSlider");
 		
 		$("#controls").slideUp(function() { 
 			$("img.tools").fadeIn();
 		});
-		var type = $(".btn-group button.btn-primary")[0].id;
+		var type = this.id;
 		
 		$("#loading").fadeIn();
 		

@@ -34,7 +34,7 @@
 	<span class="close">&times;</span>
 	<div class="inner">
 	<div class="row-fluid show-grid">
-		<div class="span7">
+		<div class="span9">
 			<h1>1. Set Your Parameters</h1>
 			<!-- Airlines Selector -->
 			<div class="btn-group">
@@ -65,21 +65,19 @@
 			  </div>
 			</div>
 			<!-- date slider -->
+			<div class="dateContainer">
+				<div class="dateSlider"></div>
+			</div>
 			<div class="clear"></div>
-			<div class="dateSlider"></div>
 
 		</div>
-		<div class="span4">
+		<div class="span3">
 			<h1>2. Select Your Visualization</h1>
 			<div class="btn-group">
 				<button class="btn btn-large type" id="plot">Plot</button>
 				<button class="btn btn-large type" id="heat">Heatmap</button>
 				<button class="btn btn-large type" id="map">Map</button>
 			</div>
-		</div>
-		<div class="span1">
-			<h1>3. Go</h1>
-			<button id="go" class="btn btn-success btn-large" type="button" disabled="disabled">Go</button>
 		</div>
 	</div>
 	</div>

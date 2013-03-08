@@ -34,7 +34,7 @@ function draw(data, flag) {
 			.attr("class", "viz" + count)
 			.attr("width", width+margin) 
 			.attr("height", height+margin)
-			.attr("viewBox", "0 0 " + width + " " + height)
+			.attr("viewBox", "0 0 " + width + " " + height - margin)
 			.attr("preserveAspectRatio", "xMidYMid");
 		
 		
