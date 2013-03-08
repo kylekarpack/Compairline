@@ -62,14 +62,24 @@ if ($request_type == "plot") {
 	$arr = explode("+", $arr);
 		
 	$stSQL = microtime(true);
-	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY "
-						. "FROM flight_data "
-						. "WHERE CARRIER IN " . $airstring . " "
-						. "AND (12 * YEAR + MONTH) "
-							. "BETWEEN " . floorDate($startYear, $startMonth) . " "
-							. "AND " . floorDate($endYear, $endMonth) . " "
-						. "GROUP BY CARRIER, " . filterString() . " "
-						. "LIMIT 365;");
+	// $query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY "
+						// . "FROM flight_data "
+						// . "WHERE CARRIER IN " . $airstring . " "
+						// . "AND (12 * YEAR + MONTH) "
+							// . "BETWEEN " . floorDate($startYear, $startMonth) . " "
+							// . "AND " . floorDate($endYear, $endMonth) . " "
+						// . "GROUP BY CARRIER, " . filterString() . " "
+						// . "LIMIT 365;");
+				
+	// redone with condensed table
+	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, DEP_DELAY as DELAY "
+					. "FROM plot_data "
+					. "WHERE CARRIER IN " . $airstring . " "
+					. "AND (12 * YEAR + MONTH) "
+						. "BETWEEN " . floorDate($startYear, $startMonth) . " "
+						. "AND " . floorDate($endYear, $endMonth) . " "
+					//. "GROUP BY CARRIER, " . filterString() . ";");
+					. "GROUP BY CARRIER, DAY_OF_MONTH, MONTH, YEAR;");
 	
 	$endSQL = microtime(true);
 	//create delays array with empty array for each airline
