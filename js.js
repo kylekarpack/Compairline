@@ -10,6 +10,10 @@ $(document).ready(function() {
 		}
 	});	
 	
+	$(".modal-footer button").click(function() {
+		location.reload();
+	});
+	
 	// construct date range slider
 	$(".dateSlider").dateRangeSlider({	
 		arrows: false,
