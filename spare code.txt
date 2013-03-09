@@ -24,6 +24,21 @@ INDEX.PHP
 	<button class="data btn" id="data">Data Points</button>
 	
 	
+	<!-- Airport Selector -->			
+			<div class="btn-group">
+			  <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">Airports <i class="icon-chevron-down"></i></a>
+			  <div class="dropdown-menu airports">
+				<ul id="airports">
+				<?php foreach (returnAirports() as $a) { ?>
+					<li><label class="<?php echo $a ?> checkbox"><?php echo $a ?><input type="checkbox" checked="true" name="<?php echo $a ?>"></input></label></li>
+				<?php } ?>
+				</ul>
+				<a class="btn btn-warning">Reset</a>
+				<a class="btn btn-success">Done</a>
+			  </div>
+			</div>
+	
+	
 	
 DATA.PHP
 

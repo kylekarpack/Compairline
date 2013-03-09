@@ -10,6 +10,7 @@ $(document).ready(function() {
 		}
 	});	
 	
+	// reload handler for errors
 	$(".modal-footer button").click(function() {
 		location.reload();
 	});
@@ -38,27 +39,37 @@ $(document).ready(function() {
 	 });
 	 
 	 // alt clicking for selecting only 1
-	 $('.dropdown-menu input').click(function(e) {
-		$(this).parent().toggleClass("noBG");
-		var cl = $(this).attr("name").toUpperCase();
-		if (e.ctrlKey || e.altKey) {
-			$(this).parent().parent().parent().find("input").prop("checked",false).parent().addClass("noBG");
-			$(this).prop("checked",true).parent().removeClass("noBG");
-			$("#brushing label").not("." + cl).toggle();			
-		} else {
-			$("#brushing label." + cl).toggle();
-		}
-	 });
+	 // $('.dropdown-menu input').click(function(e) {
+		// $(this).parent().toggleClass("noBG");
+		// var cl = $(this).attr("name").toUpperCase();
+		// if (e.ctrlKey || e.altKey) {
+			// $(this).parent().parent().parent().find("input").prop("checked",false).parent().addClass("noBG");
+			// $(this).prop("checked",true).parent().removeClass("noBG");
+			// $("#brushing label").not("." + cl).toggle();			
+		// } else {
+			// $("#brushing label." + cl).toggle();
+		// }
+	 // });
 		
+		
+	// toggle background
+	$('.dropdown-menu input').click(function() {
+		console.log($(this));
+		$(this).parent().toggleClass("noBG");
+		
+	});
 	 // Attach handler for the "Done" button
 	$(".dropdown-menu .btn-success").bind("click", function() {
 		$(this).parent().parent().toggleClass("open");
 	});
 	 
-	 // Handler for the reset button
+	 // Handler for the select all button
 	$(".dropdown-menu .btn-warning").bind("click", function() {
-		$(this).parent().find("input").prop("checked",true).parent().removeClass("noBG");
-		$("#brushing label").show();
+		$(this).toggleClass("first");
+		if ($(this).hasClass("first")) {
+			$(this).parent().find("input").prop("checked",true).parent().removeClass("noBG");
+			$("#brushing label").show();
+		}
 	 });
 	 
 	// Close menu handler
@@ -96,6 +107,16 @@ $(document).ready(function() {
 	$(".btn-group button").bind("click", function() {		
 	
 		var dateSlider = $(".dateSlider");
+		
+		$("#rezSlider").slider({
+						  value:100,
+						  min: 0,
+						  max: 500,
+						  step: 50,
+						  slide: function( event, ui ) {
+							$( "#amount" ).val( "$" + ui.value );
+						  }
+						});
 		
 		// check for massive query
 		var rng = dateSlider.dateRangeSlider("max") - dateSlider.dateRangeSlider("min");

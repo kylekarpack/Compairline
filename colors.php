@@ -28,6 +28,7 @@ for ($i = 0; $i < count(returnCarriers()); $i++) {
 	$c = colorGen($i / count(returnCarriers()));
 	echo ("." . $carrier . " {fill: " . $c . ";}\n");
 	echo ("label." . $carrier . " {background: " . $c . ";}\n");
+	echo ("label." . $carrier . " {color: " . $c . ";}\n");
 	echo ("path." . $carrier . ", circle." . $carrier . " {stroke: " . $c . ";}\n");
 }
 

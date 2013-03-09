@@ -22,10 +22,12 @@
 <?php require_once("functions.php"); ?>
 
 <div id="brushing">
+	<h2>Customize</h2>
+	<div id="rezSlider"></div>
 	<span class="closeLeft">&times;</span>
 	<ul>
 	<?php foreach (returnCarriers() as $a) { ?>
-		<li><label class="<?= $a ?>"><?= fullName($a) ?></label></li>
+		<li><label class="<?php echo $a ?>"><?php echo fullName($a) ?></label></li>
 	<?php } ?>
 	<ul>
 </div>
@@ -42,28 +44,16 @@
 			  <div class="dropdown-menu">
 				<ul id="airlines">
 				<?php foreach (returnCarriers() as $a) { ?>
-					<li><label class="<?= $a ?> checkbox"><?= fullName($a) ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
+					<li><label class="<?php echo $a ?> checkbox noBG"><?php echo fullName($a) ?><input type="checkbox" name="<?php echo $a ?>"></input></label></li>
 				<?php } ?>
 				</ul>
-				<a class="btn btn-warning">Reset</a>
+				<a class="btn btn-warning">Select All</a>
 				<a class="btn btn-success">Done</a>
-				<em><b>CTRL + Click</b> to select just one airline</em>
+				<!--<em><b>CTRL + Click</b> to select just one airline</em>-->
 			  </div>
 			</div>
 			
-			<!-- Airport Selector -->			
-			<div class="btn-group">
-			  <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">Airports <i class="icon-chevron-down"></i></a>
-			  <div class="dropdown-menu airports">
-				<ul id="airports">
-				<?php foreach (returnAirports() as $a) { ?>
-					<li><label class="<?= $a ?> checkbox"><?= $a ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
-				<?php } ?>
-				</ul>
-				<a class="btn btn-warning">Reset</a>
-				<a class="btn btn-success">Done</a>
-			  </div>
-			</div>
+			
 			<!-- date slider -->
 			<div class="dateContainer">
 				<div class="dateSlider"></div>
@@ -76,7 +66,7 @@
 			<div class="btn-group">
 				<button class="btn btn-large type" id="plot">Plot</button>
 				<button class="btn btn-large type" id="heat">Heatmap</button>
-				<button class="btn btn-large type" id="map">Map</button>
+				<!--<button class="btn btn-large type" id="map">Map</button>-->
 			</div>
 		</div>
 	</div>
@@ -90,7 +80,7 @@
 <div id="info">
 	<div id="loading">
 		<img alt="Loading" src="ajax-loader.gif">
-		<h3 style="text-align:center">Processing <?= number_format(mysql_fetch_assoc(mysql_query("SELECT count(CARRIER) as total FROM plot_data"))["total"]) ?> rows of data.</h3>
+		<h3 style="text-align:center">Processing <?php echo (number_format(mysql_fetch_assoc(mysql_query("SELECT count(CARRIER) as total FROM plot_data"))["total"])); ?> rows of data.</h3>
 		<h4 style="text-align:center">Sorry for the long loading times!<br />Have a cat:</h2>
 		<img src="http://thecatapi.com/api/images/get?format=src&type=gif">
 	</div>  
