@@ -54,8 +54,9 @@ $(document).ready(function() {
 		
 	// toggle background
 	$('.dropdown-menu input').click(function() {
-		console.log($(this));
+		var cl = $(this).attr("name");
 		$(this).parent().toggleClass("noBG");
+		$("#brushing label." + cl).toggle();
 		
 	});
 	 // Attach handler for the "Done" button
@@ -64,11 +65,16 @@ $(document).ready(function() {
 	});
 	 
 	 // Handler for the select all button
-	$(".dropdown-menu .btn-warning").bind("click", function() {
-		$(this).toggleClass("first");
+	$(".dropdown-menu .btn-primary").bind("click", function() {
+		$(this).toggleClass("first").toggleClass("btn-danger");
 		if ($(this).hasClass("first")) {
+			$(this).text("Select None");
 			$(this).parent().find("input").prop("checked",true).parent().removeClass("noBG");
 			$("#brushing label").show();
+		} else {
+			$(this).text("Select All");
+			$("#brushing label").hide();
+			$(this).parent().find("input").prop("checked",false).parent().addClass("noBG");
 		}
 	 });
 	 
@@ -105,63 +111,80 @@ $(document).ready(function() {
 	
 	// execute the query with paramaters
 	$(".btn-group button").bind("click", function() {		
-	
-		var dateSlider = $(".dateSlider");
 		
-		$("#rezSlider").slider({
-						  value:100,
-						  min: 0,
-						  max: 500,
-						  step: 50,
-						  slide: function( event, ui ) {
-							$( "#amount" ).val( "$" + ui.value );
-						  }
-						});
+		if ($("#airlines input[type=checkbox]:checked").length < 1) { // user didn't select any airlines
+			alert("Please select at least one airline");
+		} else { // we're good! let's go
 		
-		// check for massive query
-		var rng = dateSlider.dateRangeSlider("max") - dateSlider.dateRangeSlider("min");
-		rng = Math.round(rng / (24*60*60*1000));
-		console.log(rng);
-		rng = rng * $('#airlines input').length;
-		alert("Heads up! That query is going to draw at least " + rng + " elements to the DOM. It will make your machine run slowly!");
+			var type = this.id;
 		
-		$("#controls").slideUp(function() { 
-			$("img.tools").fadeIn();
-		});
-		var type = this.id;
-		
-		$("#loading").fadeIn();
-		
-		var airstring = kyleSerialize($('#airlines input'));		
-				
-		$.ajax({
-			// airlines
-			url: "data.php",
-			data: {
-				// type
-				"type": type,
-				// airlines
-				"airlines":airstring,
-				// date bounds
-				"startMonth": dateSlider.dateRangeSlider("min").getMonth() + 1,
-				"startYear": dateSlider.dateRangeSlider("min").getYear() + 1900,
-				"endMonth": dateSlider.dateRangeSlider("max").getMonth() + 1,
-				"endYear": dateSlider.dateRangeSlider("max").getYear() + 1900,
-			},
-			isModified: true,
-			dataType: 'json',
-			success: function(response) {
-				//$("body svg").fadeOut(function() {this.remove();}); //remove the old viz. Deprecated for new UI!
-				$("#loading").fadeOut();
-				draw(response, type);
-			},
-			//error handling
-			error: function(response) {
-				console.warn("There was an error receiving your data: " + response.responseText);
-				$("#loading").fadeOut(); //ajax loading
-				$("#error").modal(); //launch the error box :)
+			var dateSlider = $(".dateSlider");
+			
+			$("#rezSlider").slider({
+							  value:100,
+							  min: 0,
+							  max: 500,
+							  step: 50,
+							  slide: function( event, ui ) {
+								$( "#amount" ).val( "$" + ui.value );
+							  }
+							});
+			
+			// check for massive query
+			var rng = dateSlider.dateRangeSlider("max") - dateSlider.dateRangeSlider("min");
+			rng = Math.round(rng / (24*60*60*1000));
+			console.log(rng);
+			rng = rng * $('#airlines input:checked').length;
+			if (rng > 15000) {
+				var r = confirm("Heads up! That query is going to draw at least " + rng + " elements to the DOM. It will make your machine run slowly. Continue?");
+				if (r !== true) {
+				  x="You pressed OK!";
+				} else {
+					go();
+				}
+			} else {
+				go();
 			}
-		});
+		}
+		
+		function go() {
+				$("#controls").slideUp(function() { 
+					$("img.tools").fadeIn();
+				});
+				
+				$("#loading").fadeIn();
+				
+				var airstring = kyleSerialize($('#airlines input'));		
+						
+				$.ajax({
+					// airlines
+					url: "data.php",
+					data: {
+						// type
+						"type": type,
+						// airlines
+						"airlines":airstring,
+						// date bounds
+						"startMonth": dateSlider.dateRangeSlider("min").getMonth() + 1,
+						"startYear": dateSlider.dateRangeSlider("min").getYear() + 1900,
+						"endMonth": dateSlider.dateRangeSlider("max").getMonth() + 1,
+						"endYear": dateSlider.dateRangeSlider("max").getYear() + 1900,
+					},
+					isModified: true,
+					dataType: 'json',
+					success: function(response) {
+						//$("body svg").fadeOut(function() {this.remove();}); //remove the old viz. Deprecated for new UI!
+						$("#loading").fadeOut();
+						draw(response, type);
+					},
+					//error handling
+					error: function(response) {
+						console.warn("There was an error receiving your data: " + response.responseText);
+						$("#loading").fadeOut(); //ajax loading
+						$("#error").modal(); //launch the error box :)
+					}
+				});
+		}
 	});
 });
 

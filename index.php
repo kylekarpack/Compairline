@@ -47,7 +47,7 @@
 					<li><label class="<?php echo $a ?> checkbox noBG"><?php echo fullName($a) ?><input type="checkbox" name="<?php echo $a ?>"></input></label></li>
 				<?php } ?>
 				</ul>
-				<a class="btn btn-warning">Select All</a>
+				<a class="btn btn-primary">Select All</a>
 				<a class="btn btn-success">Done</a>
 				<!--<em><b>CTRL + Click</b> to select just one airline</em>-->
 			  </div>
