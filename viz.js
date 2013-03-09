@@ -34,7 +34,7 @@ function draw(data, flag) {
 			.attr("class", "viz" + count)
 			.attr("width", width+margin) 
 			.attr("height", height+margin)
-			.attr("viewBox", "0 0 " + width + " " + height - margin)
+			.attr("viewBox", "0 0 " + width + " " + (height + margin))
 			.attr("preserveAspectRatio", "xMidYMid");
 		
 		
@@ -135,11 +135,11 @@ function draw(data, flag) {
 			.attr("y", 0);
 		
 		//Paths
-		// var line = d3.svg.line().x(function(d){return x_scale(d.date)}).y(function(d){return y_scale(d.delay)}).interpolate("basis");
+		var line = d3.svg.line().x(function(d){return x_scale(d.date)}).y(function(d){return y_scale(d.delay)}).interpolate("basis");
 
-		// for (var i = 0; i < allKeys.length; i++) {
-			// animate(d3.select("svg").append("path").attr("d", line(data[allKeys[i]])).attr("class", allKeys[i] + " trend"));
-		// }
+		for (var i = 0; i < allKeys.length; i++) {
+			animate(d3.select("svg").append("path").attr("d", line(data[allKeys[i]])).attr("class", allKeys[i] + " trend"));
+		}
 		
 		//smooth animations (hacky)
 		function animate(path) {
@@ -218,7 +218,7 @@ function draw(data, flag) {
 			var off = $('svg').offset();
 			var mouse = d3.mouse(this);
 			//attributes
-			var delay = Math.round(this.getAttribute("data-delay") * 10) / 10,
+			var delay = Math.round(this.getAttribute("data-delay") * 100) / 100,
 				date = new Date(parseInt(this.getAttribute("data-date"))),
 				dateStr = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(),
 				airline = this.getAttribute("class");

@@ -93,9 +93,16 @@ $(document).ready(function() {
 	// });
 	
 	// execute the query with paramaters
-	$(".btn-group button").bind("click", function() {
+	$(".btn-group button").bind("click", function() {		
 	
 		var dateSlider = $(".dateSlider");
+		
+		// check for massive query
+		var rng = dateSlider.dateRangeSlider("max") - dateSlider.dateRangeSlider("min");
+		rng = Math.round(rng / (24*60*60*1000));
+		console.log(rng);
+		rng = rng * $('#airlines input').length;
+		alert("Heads up! That query is going to draw at least " + rng + " elements to the DOM. It will make your machine run slowly!");
 		
 		$("#controls").slideUp(function() { 
 			$("img.tools").fadeIn();

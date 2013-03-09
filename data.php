@@ -19,7 +19,8 @@ function timeRange() {
 
 	$yearDiff = $endYear - $startYear;
 	$monthDiff = $endMonth - $startMonth;
-	$dayRange = 365 * $yearDiff + 30 * $monthDiff;
+	
+	$dayRange = (365 * $yearDiff) + (30 * $monthDiff);
 	return $dayRange;
 }
 
@@ -27,26 +28,33 @@ function floorDate($year, $month) {
 	return 12 * $year + $month;
 }
 
+// function granularity() {
+	// $days = timeRange();
+	// if ($days < 366) {
+		// return "day";
+	// } elseif ($days < 1500) {
+		// return "month";
+	// } else {
+		// return "year";
+	// }
+// }
+
+// better way of doing it?
 function granularity() {
 	$days = timeRange();
-	if ($days < 62) {
-		return "day";
-	} elseif ($days < 730) {
-		return "month";
-	} else {
-		return "year";
-	}
+	$gran = ceil(log10($days) - 1) > 1 ? ceil(log10($days) - 1) : 1;
+	return $gran * 3;
 }
 
-function filterString() {
-	if (granularity() == "day") {
-		return "DAY_OF_MONTH, MONTH, YEAR";
-	} elseif (granularity() == "month") {
-		return "MONTH, YEAR";
-	} else {
-		return "YEAR";
-	}
-}
+// function filterString() {
+	// if (granularity() == "day") {
+		// return "DAY_OF_MONTH, MONTH, YEAR";
+	// } elseif (granularity() == "month") {
+		// return "MONTH, YEAR";
+	// } else {
+		// return "YEAR";
+	// }
+// }
 
 //find out what type of plot we are returning
 $request_type = $_GET["type"];
@@ -79,7 +87,8 @@ if ($request_type == "plot") {
 						. "BETWEEN " . floorDate($startYear, $startMonth) . " "
 						. "AND " . floorDate($endYear, $endMonth) . " "
 					//. "GROUP BY CARRIER, " . filterString() . ";");
-					. "GROUP BY CARRIER, DAY_OF_MONTH, MONTH, YEAR;");
+					. "GROUP BY CARRIER, DAY_OF_MONTH, MONTH, YEAR "
+					. "ORDER BY CARRIER, YEAR, MONTH, DAY_OF_MONTH;");
 	
 	$endSQL = microtime(true);
 	//create delays array with empty array for each airline
@@ -89,8 +98,21 @@ if ($request_type == "plot") {
 	//ineffecient loop. could use help. $x not used
 	for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
 		$row = mysql_fetch_array($query);
-		$date = mktime(0, 0, 0, (int) $row["MONTH"], (int) $row["DAY_OF_MONTH"], (int) $row["YEAR"]);
-		array_push($delays[$row["CARRIER"]], array("date" => (int) $date * 1000, "delay" => round((float) $row["DELAY"], 2))); // rounding delays for compression over network
+		if ($row["DAY_OF_MONTH"] % granularity() == 0) {
+			//debug:
+			// var_dump($row);
+			// echo("\n...........................................\n");
+			//print_r($row);
+			$date = mktime(0, 0, 0, (int) $row["MONTH"], (int) $row["DAY_OF_MONTH"], (int) $row["YEAR"]);
+			array_push($delays[$row["CARRIER"]], array("date" => (int) $date * 1000, "delay" => (float) $row["DELAY"])); // rounding delays for compression over network
+		}
+	}
+	
+	// delete empty nodes
+	foreach($delays as $key=>$val){
+		if(empty($val)) {
+			unset($delays[$key]);
+		}
 	}
 	echo ( json_encode($delays) );
 	
