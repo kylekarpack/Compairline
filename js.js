@@ -56,7 +56,7 @@ $(document).ready(function() {
 	$('.dropdown-menu input').click(function() {
 		var cl = $(this).attr("name");
 		$(this).parent().toggleClass("noBG");
-		$("#brushing label." + cl).toggle();
+		$("#brushing .labels label." + cl).toggle();
 		
 	});
 	 // Attach handler for the "Done" button
@@ -134,37 +134,40 @@ $(document).ready(function() {
 		
 			var dateSlider = $(".dateSlider");
 			
-			// check for massive query
-			var rng = Math.round((dateSlider.dateRangeSlider("max") - dateSlider.dateRangeSlider("min")) / (24*60*60*1000)) * $('#airlines input:checked').length;
-			if (rng > 20000) {
-				var r = confirm("Heads up! That query is going to draw at least " + rng + " elements to the DOM. It will make your machine run slowly. Continue?");
-				if (r !== true) {
-					//do nothing
+			if (type !== "bar") {
+				// check for massive query
+				var rng = Math.round((dateSlider.dateRangeSlider("max") - dateSlider.dateRangeSlider("min")) / (24*60*60*1000)) * $('#airlines input:checked').length;
+				if (rng > 20000) {
+					var r = confirm("Heads up! That query is going to draw at least " + rng + " elements to the DOM. It will make your machine run slowly. Continue?");
+					if (r !== true) {
+						//do nothing
+					} else {
+						go(); // user choose to override prompt
+					}
 				} else {
-					go();
+					go(); // not too big
 				}
 			} else {
-				go();
+				go(); // not a plot query
 			}
 		}
 		
-		function go() {
-				
+		function go() {	
 			//brushing
-			$('#brushing label').mouseenter(function() {
-				var otherLabels = $("label").not($(this));
+			$('#brushing .labels label').mouseenter(function() {
+				var otherLabels = $(".labels label").not($(this));
 				var className = $(this).attr('class');
-				graphicElements = $('circle:not(.' + className + '), path.trend:not(.' + className + ')');
-				targetElements = $('circle.' + className + ', path.trend.' + className);
-				graphicElements.css({"opacity": .3, "fill":"grey", "stroke":"grey"});
-				targetElements.css({"opacity":1});
+				graphicElements = $('circle:not(.' + className + '), path.trend:not(.' + className + '), rect:not(.' + className + ')');
+				targetElements = $('circle.' + className + ', path.trend.' + className + 'rect.' + className);
+				graphicElements.css({"opacity": .2, "fill":"grey", "stroke":"grey"});
+				targetElements.css({"opacity":1}).filter("path").css({"stroke-width":5});
 				otherLabels.addClass("labelDim");
 			}).mouseleave(function() {
-				var otherLabels = $("label").not($(this));
+				var otherLabels = $(".labels label").not($(this));
 				var className = $(this).attr('class');
-				graphicElements = $('circle:not(.' + className + '), path.trend:not(.' + className + ')');
+				graphicElements = $('circle:not(.' + className + '), path.trend:not(.' + className + '), rect:not(.' + className + ')');
 				graphicElements.css({"opacity": "", "fill":"", "stroke":"", "stroke-width":""});
-				targetElements.css({"opacity":""});
+				targetElements.css({"opacity":""}).filter("path").css({"stroke-width":""});
 				otherLabels.removeClass("labelDim");
 			});
 		
@@ -175,7 +178,7 @@ $(document).ready(function() {
 			$("#loading").fadeIn();
 			
 			var airstring = kyleSerialize($('#airlines input'));		
-					
+			
 			$.ajax({
 				// airlines
 				url: "data.php",
@@ -193,26 +196,17 @@ $(document).ready(function() {
 				isModified: true,
 				dataType: 'json',
 				success: function(response) {
-					$labels = $("#brushing label");
-					$labels.each(function() {
-						if ($.inArray($(this).attr("class"), Object.keys(response)) === -1) {
-							$(this).remove();
-						} else {
-							$(this).show();
-						}
-					});
 					//$("body svg").fadeOut(function() {this.remove();}); //remove the old viz. Deprecated for new UI!
-					$("#loading").fadeOut();
 				
 					draw(response, type);
-					
-					//enable pan and zoom
-					$('svg').svgPan('viewport');
+					doStuff(response, "plot");
 				},
 				//error handling
 				error: function(response) {
-					if (type === "bar") {
-						draw(response,type)
+					if (type === "bar") { // it wasn't json, but it was CSV!
+						response = d3.csv.parse(response.responseText); // this was a nightmare
+						draw(response,type); 
+						doStuff(response, "bar");
 					} else {
 						console.warn("There was an error receiving your data: " + response.responseText);
 						$("#loading").fadeOut(); //ajax loading
@@ -223,6 +217,33 @@ $(document).ready(function() {
 		}
 	});
 });
+
+// for code organization
+// constructs ui on completion of query
+function doStuff(response, type) {
+	$("#loading").fadeOut();
+	$('svg').svgPan('viewport');
+	// show brushing
+	$("#brushing").show("slide", { direction: "right" }, 500);
+	
+	var keep = [];
+	if (type === "bar") {
+		for (var i = 0; i < response.length; i++) {
+			keep.push(response[i].airline);
+		}
+	}
+	
+	var target = (type === "plot") ? Object.keys(response) : keep;
+
+	$labels = $("#brushing .labels label");
+	$labels.each(function() {
+		if ($.inArray($(this).attr("class"), target) === -1) {
+			$(this).remove();
+		} else {
+			$(this).show();
+		}
+	});
+}
 
 //stringify airlines (hacky alternative to passing two arrays to the api)
 //a special serialization technique to separate airlines

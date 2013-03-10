@@ -1,7 +1,7 @@
 function f(data) {
 
 var x = d3.scale.ordinal()
-    .rangeRoundBands([0, width], .1, 1);
+    .rangeRoundBands([0, width], .1, .1);
 
 var y = d3.scale.linear()
     .range([height, 0]);
@@ -20,9 +20,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
 	.attr("id", "viewport")
     .attr("transform", "translate(" + margin + "," + margin + ")");
-
-d3.csv(data, function(error, data) {
-
+	
   data.forEach(function(d) {
     d.delay = +d.delay;
   });
@@ -39,9 +37,11 @@ d3.csv(data, function(error, data) {
       .attr("class", "y axis")
       .call(yAxis)
     .append("text")
-      .attr("transform", "rotate(-90)")
-      .style("text-anchor", "end")
-      .text("Dekay Time");
+		.attr("transform", "rotate (90, " + -margin + ", 0)")
+		.attr("x", height / 2 - margin)
+		.attr("y", -15)
+		.style("text-anchor", "end")
+		.text("Delay Time");
 
   svg.selectAll(".bar")
       .data(data)
@@ -78,5 +78,5 @@ d3.csv(data, function(error, data) {
       .selectAll("g")
         .delay(delay);
   }
-});
+
 }

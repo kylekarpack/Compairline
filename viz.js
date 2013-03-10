@@ -20,14 +20,12 @@ $(window).on("resize", function() {
 //Draw function. This is where the money is at
 function draw(data, flag) {	
 	$('svg').remove();
+	$("#brushing .checkbox").hide();
 	
 	if (flag === "bar") {
-		$("#vizualization").prepend($("<input>").attr("id","change").attr("type", "checkbox").text("Toggle Sorting"));
+		$("#brushing .checkbox").fadeIn();
 		f(data);
 	} else if (flag === "plot") {
-
-		// show brushing
-		$("#brushing").show("slide", { direction: "right" }, 500);
 
 		//.append('<li><a href="#tab"' + count + ' data-toggle="tab">Viz ' + count + '</a></li>')
 
@@ -52,7 +50,7 @@ function draw(data, flag) {
 					.enter()
 					.append("circle")
 						.attr("class", name.toUpperCase())
-						.attr("r", 4);
+						.attr("r", 3);
 		}
 				
 		// wipe table in prep
@@ -135,7 +133,7 @@ function draw(data, flag) {
 			.text("Average Delay (Minutes)")
 			.attr("transform", "rotate (90, " + -margin + ", 0)")
 			.attr("x", height / 2 - margin)
-			.attr("y", 0);
+			.attr("y", -15);
 		
 		//Paths
 		var line = d3.svg.line().x(function(d){return x_scale(d.date)}).y(function(d){return y_scale(d.delay)}).interpolate("basis");

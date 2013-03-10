@@ -42,6 +42,7 @@ button, a, .btn, .btn-group, .dropdown-menu {
 	font-size:12px;
 	font-family:"Open Sans",sans-serif;
 	shape-rendering: crispEdges;
+	stroke-width:1;
 	path, & .tick {
 	  fill:none;
 	  stroke:#777;
@@ -57,6 +58,9 @@ circle {
 rect {
 	stroke-width:1px;
 	stroke:#fff;
+	&.bar {
+		stroke:none;
+	}
 }
 
 path {
@@ -247,13 +251,8 @@ img.tools {
 	right:0;
 	top:0;
 	padding:15px;
-	.plus {
-		text-align:center;
-		display:block;
-		min-width:20px;
-		min-height:20px;
-		background:#999;
-		color:#fff;
+	label {
+		color:@baseColor;
 	}
 	h3 {
 		color:@baseColor;

@@ -26,12 +26,12 @@
 
 <div id="brushing">
 	<h3>Customize</h3>
-	<input class="change" type="checkbox"></input>
+	<label class="checkbox"><input id="change" type="checkbox"></input>Toggle Sorting</label>		
 
 	<p></p>
 	<div id="rezSlider"></div>
 	<span class="closeLeft">&times;</span>
-	<ul>
+	<ul class="labels">
 	<?php foreach (returnCarriers() as $a) { ?>
 		<li><label class="<?php echo $a ?>"><?php echo fullName($a) ?><span class="closeLabel close">&times;</span></label></li>
 	<?php } ?>
