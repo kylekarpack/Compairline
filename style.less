@@ -129,7 +129,6 @@ em {
 
 #vizualization {
 	width:90%;
-	margin:0 auto;
 }
 
 #loading {
@@ -252,11 +251,17 @@ img.tools {
 		list-style:none;
 		margin:0;
 		label {
+			position:relative;
 			margin:0;
 			padding-left:5%;
 			box-shadow: inset 0 0 5px black;
 			color:#fff;
 			display:none;
+			.closeLabel {
+				color:#fff;
+				opacity:.8;
+				font-size:@baseFontSize;
+			}
 		}
 	}
 	h2 {

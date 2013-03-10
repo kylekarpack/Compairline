@@ -27,7 +27,7 @@
 	<span class="closeLeft">&times;</span>
 	<ul>
 	<?php foreach (returnCarriers() as $a) { ?>
-		<li><label class="<?php echo $a ?>"><?php echo fullName($a) ?></label></li>
+		<li><label class="<?php echo $a ?>"><?php echo fullName($a) ?><span class="closeLabel close">&times;</span></label></li>
 	<?php } ?>
 	<ul>
 </div>
