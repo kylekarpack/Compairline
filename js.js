@@ -28,7 +28,7 @@ $(document).ready(function() {
 				max: new Date(2012, 12, 31)
 				},
 		 defaultValues: {
-				min: new Date(2008, 0, 1),
+				min: new Date(2011, 0, 1),
 				max: new Date(2012, 12, 31)
 				},
 	});
@@ -115,6 +115,13 @@ $(document).ready(function() {
 		// $("#go").removeAttr("disabled");
 	// });
 	
+	//zooming and panning
+	// $("#brushing").bind("click", function(evt) {
+		// console.log($(this));
+		// $(this).zoomTo({targetsize:.55, duration:600});
+		// evt.stopPropagation();
+    // });
+	
 	// execute the query with paramaters
 	$(".btn-group button").bind("click", function() {		
 		
@@ -142,6 +149,25 @@ $(document).ready(function() {
 		}
 		
 		function go() {
+				
+			//brushing
+			$('#brushing label').mouseenter(function() {
+				var otherLabels = $("label").not($(this));
+				var className = $(this).attr('class');
+				graphicElements = $('circle:not(.' + className + '), path.trend:not(.' + className + ')');
+				targetElements = $('circle.' + className + ', path.trend.' + className);
+				graphicElements.css({"opacity": .3, "fill":"grey", "stroke":"grey"});
+				targetElements.css({"opacity":1});
+				otherLabels.addClass("labelDim");
+			}).mouseleave(function() {
+				var otherLabels = $("label").not($(this));
+				var className = $(this).attr('class');
+				graphicElements = $('circle:not(.' + className + '), path.trend:not(.' + className + ')');
+				graphicElements.css({"opacity": "", "fill":"", "stroke":"", "stroke-width":""});
+				targetElements.css({"opacity":""});
+				otherLabels.removeClass("labelDim");
+			});
+		
 			$("#controls").slideUp(function() { 
 				$("img.tools").fadeIn();
 			});
@@ -167,15 +193,31 @@ $(document).ready(function() {
 				isModified: true,
 				dataType: 'json',
 				success: function(response) {
+					$labels = $("#brushing label");
+					$labels.each(function() {
+						if ($.inArray($(this).attr("class"), Object.keys(response)) === -1) {
+							$(this).remove();
+						} else {
+							$(this).show();
+						}
+					});
 					//$("body svg").fadeOut(function() {this.remove();}); //remove the old viz. Deprecated for new UI!
 					$("#loading").fadeOut();
+				
 					draw(response, type);
+					
+					//enable pan and zoom
+					$('svg').svgPan('viewport');
 				},
 				//error handling
 				error: function(response) {
-					console.warn("There was an error receiving your data: " + response.responseText);
-					$("#loading").fadeOut(); //ajax loading
-					$("#error").modal(); //launch the error box :)
+					if (type === "bar") {
+						draw(response,type)
+					} else {
+						console.warn("There was an error receiving your data: " + response.responseText);
+						$("#loading").fadeOut(); //ajax loading
+						$("#error").modal(); //launch the error box
+					}
 				}
 			});
 		}

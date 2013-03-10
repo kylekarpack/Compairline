@@ -1,6 +1,4 @@
 <?php
-header('Content-type: application/json'); //set it to return json
-
 require_once("functions.php"); //include the credentials grabber function and others
 
 //$airlines = returnCarriers();
@@ -59,7 +57,7 @@ function granularity() {
 //find out what type of plot we are returning
 $request_type = $_GET["type"];
 
-if ($request_type == "plot") {
+if ($request_type == "plot" || $request_type == "bar") {
 	$delays = array();
 	
 	$arr = $_GET["airlines"];
@@ -68,8 +66,8 @@ if ($request_type == "plot") {
 	//for output array
 	$arr = str_replace("'", "", $arr);
 	$arr = explode("+", $arr);
-		
-	$stSQL = microtime(true);
+	
+	if ($request_type == "plot") {
 	// $query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY "
 						// . "FROM flight_data "
 						// . "WHERE CARRIER IN " . $airstring . " "
@@ -79,45 +77,65 @@ if ($request_type == "plot") {
 						// . "GROUP BY CARRIER, " . filterString() . " "
 						// . "LIMIT 365;");
 				
-	// redone with condensed table
-	$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, DEP_DELAY as DELAY "
-					. "FROM plot_data "
-					. "WHERE CARRIER IN " . $airstring . " "
-					. "AND (12 * YEAR + MONTH) "
-						. "BETWEEN " . floorDate($startYear, $startMonth) . " "
-						. "AND " . floorDate($endYear, $endMonth) . " "
-					//. "GROUP BY CARRIER, " . filterString() . ";");
-					. "GROUP BY CARRIER, DAY_OF_MONTH, MONTH, YEAR "
-					. "ORDER BY CARRIER, YEAR, MONTH, DAY_OF_MONTH;");
-	
-	$endSQL = microtime(true);
-	//create delays array with empty array for each airline
-	foreach ($arr as $airline) {
-		$delays[$airline] = array();
-	}
-	//ineffecient loop. could use help. $x not used
-	for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
-		$row = mysql_fetch_array($query);
-		if ($row["DAY_OF_MONTH"] % granularity() == 0) {
-			//debug:
-			// var_dump($row);
-			// echo("\n...........................................\n");
-			//print_r($row);
-			$date = mktime(0, 0, 0, (int) $row["MONTH"], (int) $row["DAY_OF_MONTH"], (int) $row["YEAR"]);
-			array_push($delays[$row["CARRIER"]], array("date" => (int) $date * 1000, "delay" => (float) $row["DELAY"])); // rounding delays for compression over network
+		// redone with condensed table
+		$query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, DEP_DELAY as DELAY "
+						. "FROM plot_data "
+						. "WHERE CARRIER IN " . $airstring . " "
+						. "AND (12 * YEAR + MONTH) "
+							. "BETWEEN " . floorDate($startYear, $startMonth) . " "
+							. "AND " . floorDate($endYear, $endMonth) . " "
+						//. "GROUP BY CARRIER, " . filterString() . ";");
+						. "GROUP BY CARRIER, DAY_OF_MONTH, MONTH, YEAR "
+						. "ORDER BY CARRIER, YEAR, MONTH, DAY_OF_MONTH;");
+		
+		//create delays array with empty array for each airline
+		foreach ($arr as $airline) {
+			$delays[$airline] = array();
 		}
-	}
-	
-	// delete empty nodes
-	foreach($delays as $key=>$val){
-		if(empty($val)) {
-			unset($delays[$key]);
+		//ineffecient loop. could use help. $x not used
+		for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
+			$row = mysql_fetch_array($query);
+			if ($row["DAY_OF_MONTH"] % granularity() == 0) {
+				//debug:
+				// var_dump($row);
+				// echo("\n...........................................\n");
+				//print_r($row);
+				$date = mktime(0, 0, 0, (int) $row["MONTH"], (int) $row["DAY_OF_MONTH"], (int) $row["YEAR"]);
+				array_push($delays[$row["CARRIER"]], array("date" => (int) $date * 1000, "delay" => (float) $row["DELAY"])); // rounding delays for compression over network
+			}
 		}
+		header('Content-type: application/json'); //set it to return json
+		// delete empty nodes
+		foreach($delays as $key=>$val){
+			if(empty($val)) {
+				unset($delays[$key]);
+			}
+		}
+		echo ( json_encode($delays) );
+		
+	} else { //bar
+		
+		header("Content-Type: text/plain");
+	
+		$query = mysql_query("select CARRIER, avg(dep_delay) as DELAY "
+						. "from plot_data "
+						. "WHERE CARRIER IN " . $airstring . " "
+						. "AND (12 * YEAR + MONTH) "
+							. "BETWEEN " . floorDate($startYear, $startMonth) . " "
+							. "AND " . floorDate($endYear, $endMonth) . " "
+						. "GROUP BY CARRIER;");
+		
+		$csv = "airline,delay\n";
+		for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
+			$row = mysql_fetch_array($query);
+			$csv .= $row["CARRIER"] . "," . $row["DELAY"] . "\n";
+		}
+		echo $csv;
 	}
-	echo ( json_encode($delays) );
 	
 //It's a request for a heat map!!	
 } elseif ($request_type == "heat") { // DO SOMETHING BETTER THAN TRUNCATING 24 values!!!
+	header('Content-type: application/json'); //set it to return json
 	$stSQL = microtime(true);
 	$query = mysql_query("SELECT DAY_OF_WEEK, FLOOR(CRS_DEP_TIME/100) AS HOUR_ROUND, avg(DEP_DELAY) AS DELAY FROM flight_data WHERE FLOOR(CRS_DEP_TIME/100) != 24 GROUP BY DAY_OF_WEEK, FLOOR(CRS_DEP_TIME/100)");
 	$endSQL = microtime(true);

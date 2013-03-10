@@ -22,18 +22,18 @@ if (!$con) {
 // Return an array of carriers
 function returnCarriers() {
 	//get relevant carriers
-	$max = 30;
-	$getCarriers = mysql_query("SELECT DISTINCT CARRIER FROM plot_data LIMIT " . $max);
-	$airlines = array();
-	for ($x = 0, $numrows = mysql_num_rows($getCarriers); $x < $numrows; $x++) {
-		$row = mysql_fetch_array($getCarriers);
-		$airlines[] = $row[0];
-	}
+	// $max = 30;
+	// $getCarriers = mysql_query("SELECT DISTINCT CARRIER FROM plot_data LIMIT " . $max);
+	// $airlines = array();
+	// for ($x = 0, $numrows = mysql_num_rows($getCarriers); $x < $numrows; $x++) {
+		// $row = mysql_fetch_array($getCarriers);
+		// $airlines[] = $row[0];
+	// }
 	
 	// Do it without database:
-	// $file = file_get_contents("airlines.json");
-	// $json = json_decode($file, true); // true for assoc
-	// $airlines = array_keys($json);
+	$file = file_get_contents("airlines.json");
+	$json = json_decode($file, true); // true for assoc
+	$airlines = array_keys($json);
 	
 	return $airlines;
 }

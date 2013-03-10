@@ -12,8 +12,11 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.0.1/d3.v3.min.js"></script>
 	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+	<script src="jquery.zoomooz.min.js"></script>
 	<script src="jquery.svgdom.min.js"></script>
 	<script src="jQDateRangeSlider-min.js"></script>
+	<script src="jquery-svgpan.js"></script>
+	<script src="alt.js"></script>
 	<script src="js.js"></script>
 	<script src="viz.js"></script>
 </head>
@@ -22,7 +25,10 @@
 <?php require_once("functions.php"); ?>
 
 <div id="brushing">
-	<h2>Customize</h2>
+	<h3>Customize</h3>
+	<input class="change" type="checkbox"></input>
+
+	<p></p>
 	<div id="rezSlider"></div>
 	<span class="closeLeft">&times;</span>
 	<ul>
@@ -53,7 +59,6 @@
 			  </div>
 			</div>
 			
-			
 			<!-- date slider -->
 			<div class="dateContainer">
 				<div class="dateSlider"></div>
@@ -65,6 +70,7 @@
 			<h1>2. Select Your Visualization</h1>
 			<div class="btn-group">
 				<button class="btn btn-large type" id="plot">Plot</button>
+				<button class="btn btn-large type" id="bar">Bars</button>
 				<button class="btn btn-large type" id="heat">Heatmap</button>
 				<!--<button class="btn btn-large type" id="map">Map</button>-->
 			</div>
@@ -76,11 +82,10 @@
 
 <div class="clear"></div>
 
-<!-- ACCORDION HERE? -->
 <div id="info">
 	<div id="loading">
 		<img alt="Loading" src="ajax-loader.gif">
-		<h3 style="text-align:center">Processing <?php echo (number_format(mysql_fetch_assoc(mysql_query("SELECT count(CARRIER) as total FROM plot_data"))["total"])); ?> rows of data.</h3>
+		<h3 style="text-align:center">Processing <?php echo number_format(mysql_result(mysql_query("SELECT count(CARRIER) as total FROM plot_data"), 0)); ?> rows of data.</h3>
 		<h4 style="text-align:center">Sorry for the long loading times!<br />Have a cat:</h2>
 		<img src="http://thecatapi.com/api/images/get?format=src&type=gif">
 	</div>  

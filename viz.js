@@ -6,7 +6,6 @@ var height = $(window).height() - 150;
 var count = 0; // track the number of vizualizations asked for
 
 
-// Implemented but buggy
 $(window).on("resize", function() {
 	var chart = $("svg");
 	if (chart.length !== 0) {
@@ -19,31 +18,35 @@ $(window).on("resize", function() {
 });
 	
 //Draw function. This is where the money is at
-function draw(data, flag) {
-	count++;
+function draw(data, flag) {	
+	$('svg').remove();
 	
-	if (flag === "plot") {
+	if (flag === "bar") {
+		$("#vizualization").prepend($("<input>").attr("id","change").attr("type", "checkbox").text("Toggle Sorting"));
+		f(data);
+	} else if (flag === "plot") {
 
 		// show brushing
 		$("#brushing").show("slide", { direction: "right" }, 500);
 
 		//.append('<li><a href="#tab"' + count + ' data-toggle="tab">Viz ' + count + '</a></li>')
 
-		d3.select("#vizualization")
+		var svg = d3.select("#vizualization")
 			.append("svg")
-			.attr("class", "viz" + count)
 			.attr("width", width+margin) 
 			.attr("height", height+margin)
-			.attr("viewBox", "0 0 " + width + " " + (height + margin))
-			.attr("preserveAspectRatio", "xMidYMid");
+			//.attr("viewBox", "0 0 " + width + " " + (height + margin))
+			.attr("preserveAspectRatio", "xMidYMid")
+		
+		var g = svg.append('g')
+			.attr('id', 'viewport');
 		
 		
-		var svg = d3.select("svg.viz" + count);
 		// Takes parameters: data, name of the airline
 		// Does: Draws the CIRCLES ONLY for that airline
 		function graphAirline(data, name) {	
 			//draw pounts
-			svg
+			g
 				.selectAll("circle." + name)
 					.data(data) 
 					.enter()
@@ -51,7 +54,7 @@ function draw(data, flag) {
 						.attr("class", name.toUpperCase())
 						.attr("r", 4);
 		}
-		
+				
 		// wipe table in prep
 		var table = $("#table table");
 		table.children().remove();
@@ -103,7 +106,7 @@ function draw(data, flag) {
 		//Create Axes
 		var x_axis = d3.svg.axis()
 					.scale(x_scale)
-		svg
+		g
 			.append("g")
 			.attr("class", "x axis")
 			.attr("transform", "translate(0," + (height) + ")")
@@ -114,7 +117,7 @@ function draw(data, flag) {
 		var y_axis = d3.svg.axis()
 					.scale(y_scale)
 					.orient("left");
-		svg
+		g
 			.append("g")
 			.attr("class", "y axis")
 			.attr("transform", "translate(" + margin + ", 0 )")
@@ -138,7 +141,10 @@ function draw(data, flag) {
 		var line = d3.svg.line().x(function(d){return x_scale(d.date)}).y(function(d){return y_scale(d.delay)}).interpolate("basis");
 
 		for (var i = 0; i < allKeys.length; i++) {
-			animate(d3.select("svg").append("path").attr("d", line(data[allKeys[i]])).attr("class", allKeys[i] + " trend"));
+			animate(g
+				.append("path")
+				.attr("d", line(data[allKeys[i]]))
+				.attr("class", allKeys[i] + " trend"));
 		}
 		
 		//smooth animations (hacky)
@@ -152,11 +158,46 @@ function draw(data, flag) {
 				.ease("linear")
 				.attr("stroke-dashoffset", 0);
 		}
+		
+		//focus/context 
+		
+		// var sortTimeout = setTimeout(function() {
+			// d3.select("input.change").property("checked", true).each(change);
+		  // }, 2000);
+		$("#brushing").click(change);
+		
+		//broken!
+		function change() {
+			//clearTimeout(sortTimeout);
+			// $("path.trend").fadeOut();
+			
+			// var x0 = d3.scale
+				// .linear().domain(data.DL.sort(this.checked
+				// ? function(a, b) { return new Date(b.date - a.date); }
+				// : function(a, b) {
+					// return d3.ascending(a.delay, b.delay); 
+				// })
+				// .map(function(d) { return d.delay; }))
+				// .copy();
+							
+			// var transition = svg.transition().duration(750),
+				// delay = function(d, i) { return i * 50; };
+
+			// transition.selectAll("circle")
+				// .delay(delay)
+				// .attr("cx", function(d) {return x0(d.delay) * 25 + margin; });
+
+			// transition.select(".x.axis")
+				// .call(x_axis)
+			  // .selectAll("g")
+				// .delay(delay);
+		  }
 	} else {	//heatmap
-		var svg = d3.select("body").append("svg")
+		var svg = d3.select("vizualization").append("svg")
 			.attr("width", width + margin)
 			.attr("height", height + margin)
 		  .append("g")
+			.attr("id", "viewport")
 			.attr("transform", "translate(" + margin + "," + margin + ")");
 		
 		var isW = Math.floor($("svg").width() / 25);
