@@ -16,6 +16,7 @@
 	<script src="jQDateRangeSlider-min.js"></script>
 	<script src="js.js"></script>
 	<script src="viz.js"></script>
+    <script src="brushing.js"></script>
 </head>
 
 <body>
@@ -25,7 +26,7 @@
 	<span class="closeLeft">&times;</span>
 	<ul>
 	<?php foreach (returnCarriers() as $a) { ?>
-		<li><label class="<?= $a ?>"><?= fullName($a) ?></label></li>
+		<li><label class="<?php echo $a ?>"><?php echo fullName($a) ?></label></li>
 	<?php } ?>
 	<ul>
 </div>
@@ -42,7 +43,7 @@
 			  <div class="dropdown-menu">
 				<ul id="airlines">
 				<?php foreach (returnCarriers() as $a) { ?>
-					<li><label class="<?= $a ?> checkbox"><?= fullName($a) ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
+					<li><label class="<?php echo $a ?> checkbox"><?php echo fullName($a) ?><input type="checkbox" checked="true" name="<?php echo $a ?>"></input></label></li>
 				<?php } ?>
 				</ul>
 				<a class="btn btn-warning">Reset</a>
@@ -57,7 +58,7 @@
 			  <div class="dropdown-menu airports">
 				<ul id="airports">
 				<?php foreach (returnAirports() as $a) { ?>
-					<li><label class="<?= $a ?> checkbox"><?= $a ?><input type="checkbox" checked="true" name="<?= $a ?>"></input></label></li>
+					<li><label class="<?php echo $a ?> checkbox"><?php echo $a ?><input type="checkbox" checked="true" name="<?php echo $a ?>"></input></label></li>
 				<?php } ?>
 				</ul>
 				<a class="btn btn-warning">Reset</a>
