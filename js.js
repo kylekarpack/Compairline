@@ -1,7 +1,7 @@
 //THIS IS ALL FRONT END CODE
 $(document).ready(function() {	
 	
-	// deferred load the stylesheet
+	// deferred load the stylesheet (for performance)
 	$.ajax({
 		url:"colors.php",
 		data: {},
@@ -127,6 +127,8 @@ $(document).ready(function() {
 		
 		if ($("#airlines input[type=checkbox]:checked").length < 1) { // user didn't select any airlines
 			alert("Please select at least one airline");
+		} else if ($('#airlines input:checked').length > 3) {
+			alert("Please only use three or less airlines for heatmaps");
 		} else { // we're good! let's go
 		
 			//type of request
@@ -134,7 +136,7 @@ $(document).ready(function() {
 		
 			var dateSlider = $(".dateSlider");
 			
-			if (type !== "bar") {
+			if (type === "plot") {
 				// check for massive query
 				var rng = Math.round((dateSlider.dateRangeSlider("max") - dateSlider.dateRangeSlider("min")) / (24*60*60*1000)) * $('#airlines input:checked').length;
 				if (rng > 20000) {
@@ -153,23 +155,6 @@ $(document).ready(function() {
 		}
 		
 		function go() {	
-			//brushing
-			$('#brushing .labels label').mouseenter(function() {
-				var otherLabels = $(".labels label").not($(this));
-				var className = $(this).attr('class');
-				graphicElements = $('circle:not(.' + className + '), path.trend:not(.' + className + '), rect:not(.' + className + ')');
-				targetElements = $('circle.' + className + ', path.trend.' + className + 'rect.' + className);
-				graphicElements.css({"opacity": .2, "fill":"grey", "stroke":"grey"});
-				targetElements.css({"opacity":1}).filter("path").css({"stroke-width":5});
-				otherLabels.addClass("labelDim");
-			}).mouseleave(function() {
-				var otherLabels = $(".labels label").not($(this));
-				var className = $(this).attr('class');
-				graphicElements = $('circle:not(.' + className + '), path.trend:not(.' + className + '), rect:not(.' + className + ')');
-				graphicElements.css({"opacity": "", "fill":"", "stroke":"", "stroke-width":""});
-				targetElements.css({"opacity":""}).filter("path").css({"stroke-width":""});
-				otherLabels.removeClass("labelDim");
-			});
 		
 			$("#controls").slideUp(function() { 
 				$("img.tools").fadeIn();

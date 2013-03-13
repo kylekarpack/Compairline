@@ -1,0 +1,14 @@
+to do
+
+CHART TITLES
+
+HEATMAP
+	opacity, size
+	small multiples (limit 3)
+	data in boxes for number sampled
+
+
+Year over year / season over season
+
+Paper:
+	Big data!

@@ -53,6 +53,9 @@ circle {
 	stroke-width:0;
 	opacity:.3;
 	cursor:default;
+	&.target {
+		stroke-width:3;
+	}
 }
 
 rect {
@@ -67,10 +70,36 @@ path {
 	stroke-width:2;
 	fill:none !important;
 	opacity:.7;
+	-webkit-transition:stroke-width .3s ease-in-out;
+	&.target {
+		stroke-width:4;
+	}
 }
 
 .title {
 	font-weight:700;
+}
+
+// Brushing code here
+path.trend, circle, rect {
+	-webkit-transition:fill .3s ease-in-out, opacity .3s ease-in-out;
+	&.not {
+		opacity:.2;
+		fill:grey;
+		stroke:grey;
+	}
+	&.heat.not {
+		stroke:#fff;
+		opacity:.8;
+	}
+	&.target {
+		opacity:1;
+	}
+	&.heat.target {
+		stroke:#444;
+		stroke-width:3;
+		z-index:999;
+	}
 }
 
 body, html {
@@ -117,16 +146,12 @@ em {
 }
 
 .local-data {
-	z-index:999;
-	position:absolute;
 	padding:0 2% 2%;
-	font-size:18px;
-	box-shadow:0 0 10px #ccc;
-	background:#fff;
-	background:rgba(255,255,255,.9);
+	font-size:16px;
+	color:@baseColor;
 	opacity:1;
 	-webkit-transition:opacity .2s ease-in-out;
-	&.hiddenPop {
+	&.gone {
 		opacity:0;
 	}
 }
@@ -254,9 +279,14 @@ img.tools {
 	label {
 		color:@baseColor;
 	}
+	#cust1 {
+		h3 {
+			margin-top:0;
+		}
+	}
 	h3 {
 		color:@baseColor;
-		margin-top:0;
+		margin-bottom:5px;
 	}
 	ul {
 		list-style:none;
@@ -269,6 +299,7 @@ img.tools {
 			color:#fff;
 			display:none;
 			cursor:default;
+			-webkit-transition:.3s background ease-in-out, .3s color ease-in-out;
 			&.labelDim {
 				background:#ccc;
 				color:#222;
