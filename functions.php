@@ -50,11 +50,12 @@ function returnAirports() {
 	$file = utf8_decode(file_get_contents("airports.json"));
 	$json = json_decode($file, true); // true for assoc
 	$airports = array_keys($json);
-	$airports = array_slice($airports, 0 , 15);
+	//$airports = array_slice($airports, 0 , 15);
 	
 	return $airports;	
 }
 
+// Pretty much deprecated, but scared to take it out
 // Return the full name from an abbreviation
 function fullName($abbrev) {
 	$file = file_get_contents("airlines.json");

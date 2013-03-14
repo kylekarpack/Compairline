@@ -16,6 +16,7 @@
 	<script src="jquery.svgdom.min.js"></script>
 	<script src="jQDateRangeSlider-min.js"></script>
 	<script src="jquery-svgpan.js"></script>
+	<script src="functions.js"></script>
 	<script src="js.js"></script>
 	<script src="viz.js"></script>
 </head>
@@ -45,7 +46,7 @@
 	<span class="close">&times;</span>
 	<div class="inner">
 	<div class="row-fluid show-grid">
-		<div class="span9">
+		<div class="span7">
 			<h1>1. Set Your Parameters</h1>
 			<!-- Airlines Selector -->
 			<div class="btn-group">
@@ -69,7 +70,7 @@
 			<div class="clear"></div>
 
 		</div>
-		<div class="span3">
+		<div class="span5">
 			<h1>2. Select Your Visualization</h1>
 			<div class="btn-group">
 				<button class="btn btn-large type" id="plot">Plot</button>
@@ -89,7 +90,6 @@
 	<div id="loading">
 		<img alt="Loading" src="ajax-loader.gif">
 		<h3 style="text-align:center">Processing <?php echo number_format(mysql_result(mysql_query("SELECT count(CARRIER) as total FROM plot_data"), 0)); ?> rows of data.</h3>
-		<h4 style="text-align:center">Sorry for the long loading times!<br />Have a cat:</h2>
 		<img src="compairline.gif" />
 	</div>  
 	<div id="error" class="modal hide fade" tabindex="-1" role="dialog">
@@ -111,13 +111,5 @@
 <!--VISUALIZATIONS GO HERE -->
 </div>
 
-<img src="table.png" class="tools bottom">
-
-<div id="table">
-	<span class="close">&times;</span>
-	<table class="table table-striped table-hover table-bordered table-condensed">
-		
-	</table>
-</div>
 </body>
 </html>

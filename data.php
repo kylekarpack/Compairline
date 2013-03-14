@@ -64,14 +64,13 @@ function airstring() {
 
 //find out what type of plot we are returning
 $request_type = $_GET["type"];
+	
+//for output array
+$delays = array();
+$airlineList = str_replace("'", "", $airlineList);
+$airlineList = explode("+", $airlineList);
 
 if ($request_type == "plot" || $request_type == "bar") {
-	$delays = array();
-	
-	//for output array
-	$airlineList = str_replace("'", "", $airlineList);
-	$airlineList = explode("+", $airlineList);
-	
 	if ($request_type == "plot") {
 	// $query = mysql_query("SELECT DISTINCT DAY_OF_MONTH, MONTH, YEAR, CARRIER, avg(DEP_DELAY) as DELAY "
 						// . "FROM flight_data "
@@ -142,22 +141,22 @@ if ($request_type == "plot" || $request_type == "bar") {
 } elseif ($request_type == "heat") {
 	header('Content-type: application/json'); //set it to return json
 	$stSQL = microtime(true);
-	$query = mysql_query("SELECT DAY_OF_WEEK, HOUR, avg(delay) as DELAY, count(*) AS NUMBER "
+	$query = mysql_query("SELECT DAY_OF_WEEK, HOUR, avg(delay) as DELAY, count(*) AS NUMBER, CARRIER "
 						. "FROM heatmap_data "
 						. "WHERE CARRIER in " . airstring() . " "
 						. "AND (12 * YEAR + MONTH) "
 							. "BETWEEN " . floorDate($startYear, $startMonth) . " "
 							. "AND " . floorDate($endYear, $endMonth) . " "
-						. "GROUP BY day_of_week, hour "
-						. "ORDER BY day_of_week, hour");
-	$delays = array();
+						. "GROUP BY CARRIER, day_of_week, hour "
+						. "ORDER BY CARRIER, day_of_week, hour");
+
 	for ($x = 0, $numrows = mysql_num_rows($query); $x < $numrows; $x++) {
 		$row = mysql_fetch_array($query);
 		//typecasting ints and floats
 		$day = (int) $row["DAY_OF_WEEK"];
 		$time = (int) $row["HOUR"];
 		$timeXY = array($time, $day);
-		array_push($delays, array($timeXY, (float) $row["DELAY"], (int) $row["NUMBER"]));
+		$delays[$row["CARRIER"]][] = array($timeXY, (float) $row["DELAY"], (int) $row["NUMBER"]);
 	}
 	
 	echo (json_encode($delays));

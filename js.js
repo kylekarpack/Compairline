@@ -1,3 +1,5 @@
+var airstring;
+
 //THIS IS ALL FRONT END CODE
 $(document).ready(function() {	
 	
@@ -123,17 +125,15 @@ $(document).ready(function() {
     // });
 	
 	// execute the query with paramaters
-	$(".btn-group button").bind("click", function() {		
+	$(".btn-group button").bind("click", function() {				
+		//type of request
+		var type = this.id;
 		
 		if ($("#airlines input[type=checkbox]:checked").length < 1) { // user didn't select any airlines
 			alert("Please select at least one airline");
-		} else if ($('#airlines input:checked').length > 3) {
+		} else if ($('#airlines input:checked').length > 3 && type === "heat") {
 			alert("Please only use three or less airlines for heatmaps");
 		} else { // we're good! let's go
-		
-			//type of request
-			var type = this.id;
-		
 			var dateSlider = $(".dateSlider");
 			
 			if (type === "plot") {
@@ -162,7 +162,7 @@ $(document).ready(function() {
 			
 			$("#loading").fadeIn();
 			
-			var airstring = kyleSerialize($('#airlines input'));		
+			airstring = kyleSerialize($('#airlines input'));		
 			
 			$.ajax({
 				// airlines
@@ -184,14 +184,14 @@ $(document).ready(function() {
 					//$("body svg").fadeOut(function() {this.remove();}); //remove the old viz. Deprecated for new UI!
 				
 					draw(response, type);
-					doStuff(response, "plot");
+					doStuff(response, type);
 				},
 				//error handling
 				error: function(response) {
 					if (type === "bar") { // it wasn't json, but it was CSV!
 						response = d3.csv.parse(response.responseText); // this was a nightmare
 						draw(response,type); 
-						doStuff(response, "bar");
+						doStuff(response, type);
 					} else {
 						console.warn("There was an error receiving your data: " + response.responseText);
 						$("#loading").fadeOut(); //ajax loading
@@ -202,42 +202,3 @@ $(document).ready(function() {
 		}
 	});
 });
-
-// for code organization
-// constructs ui on completion of query
-function doStuff(response, type) {
-	$("#loading").fadeOut();
-	$('svg').svgPan('viewport');
-	// show brushing
-	$("#brushing").show("slide", { direction: "right" }, 500);
-	
-	var keep = [];
-	if (type === "bar") {
-		for (var i = 0; i < response.length; i++) {
-			keep.push(response[i].airline);
-		}
-	}
-	
-	var target = (type === "plot") ? Object.keys(response) : keep;
-
-	$labels = $("#brushing .labels label");
-	$labels.each(function() {
-		if ($.inArray($(this).attr("class"), target) === -1) {
-			$(this).remove();
-		} else {
-			$(this).show();
-		}
-	});
-}
-
-//stringify airlines (hacky alternative to passing two arrays to the api)
-//a special serialization technique to separate airlines
-function kyleSerialize(inputs) {	
-	var airstring = "";
-	inputs.each(function () {
-		if ($(this).prop("checked")) {
-			airstring += "'" + this.name + "'+";
-		}
-	});
-	return airstring.substring(0, airstring.length - 1);
-}

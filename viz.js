@@ -3,27 +3,14 @@
 var margin = $(window).width() / 20;
 var width = $(window).width() - margin * 5;
 var height = $(window).height() - 150;
-var count = 0; // track the number of vizualizations asked for
-
-// Deprecated responsive code
-// $(window).on("resize", function() {
-	// var chart = $("svg");
-	// if (chart.length !== 0) {
-		// margin = $(window).width() / 20;
-		// width = $(window).width() - margin * 5;
-		// height = $(window).height() - 150;
-		// chart.attr("width", width+margin);
-		// chart.attr("height", height+margin);
-	// }
-// });
 	
 //Draw function. This is where the money is at
 function draw(data, flag) {	
 	$('svg').remove();
 	$("#cust1").show(); //bugfix
 	$("#brushing .checkbox").hide(); //bugfix
-	$("#brushing .checkbox").hide();
-	
+
+		
 	if (flag === "bar") {
 		$("#brushing .checkbox").fadeIn();
 		var x = d3.scale.ordinal()
@@ -104,7 +91,8 @@ function draw(data, flag) {
 				.call(xAxis)
 			  .selectAll("g")
 				.delay(delay);
-		  }
+		}		
+			
 	} else if (flag === "plot") {
 
 		//.append('<li><a href="#tab"' + count + ' data-toggle="tab">Viz ' + count + '</a></li>')
@@ -132,33 +120,13 @@ function draw(data, flag) {
 						.attr("class", name.toUpperCase())
 						.attr("r", 3);
 		}
-				
-		// wipe table in prep
-		var table = $("#table table");
-		table.children().remove();
-		table.append("<tr><th>Date</th><th>Airline</th><th>Delay</th></tr>");
-		function populateTable(data, name) {
-			// append header row
-			try {
-				var d = new Date(data[0].date);
-				dateStr = d.getMonth() + 1 + "/" + d.getDate() + "/" + parseInt(d.getYear() + 1900);
-				//populate table
-				table.append("<tr><td>" + 
-										dateStr + 
-										"</td><td>" + name.toUpperCase() + 
-										"</td><td>" + data[0].delay + 
-										"</td></tr>");
-			} catch(err) {
-				// remove this line for production
-				console.warn("Empty object passed, accessing its fields yielded a: " + err);
-			}
-		}
 		
 		//loop through response data and plot it
 		var allKeys = Object.keys(data);
 		var allData = new Array();
 		for (var i = 0; i < allKeys.length; i++) {
-			populateTable(data[allKeys[i]], allKeys[i].toLowerCase());
+			// Deprecated!
+			//populateTable(data[allKeys[i]], allKeys[i].toLowerCase());
 			graphAirline(data[allKeys[i]], allKeys[i].toLowerCase());
 			allData = allData.concat(data[allKeys[i]]);			
 		}		
@@ -246,91 +214,130 @@ function draw(data, flag) {
 	} else {	//heatmap
 		$("#cust1").hide();
 		width = width + margin * 3; // this viz can be wider
-		height = $(window).height() - margin;
+		height = $(window).height();
 		var svg = d3.select("#vizualization").append("svg")
 			.attr("width", width)
 			.attr("height", height)
 		 
 		//append viewport
+		
 		var g = svg.append("g")
 			.attr("id", "viewport")
-			.attr("transform", "translate(" + (margin + 20) + ", 0)");
+			.attr("transform", "translate(" + (margin + 20) + ", 0)")
 		
 		// get grid size based on width and height
-		var isW = Math.floor($("svg").width() / 24);
-		var isH = Math.floor($("svg").height() / 7);
+		var isW = Math.floor(svg.attr("width") / 24);
+		var isH = Math.floor(svg.attr("height") / 7);
 		
 		var gridSize = isW < isH ? isW : isH;
 			h = gridSize,
 			w = gridSize;
+		
+		
+		// this is shameful
+		var delays = [];
 
-		var maxDelay = d3.extent(data, function(d) { return d[1] })[1];
-		var heatMap = g.selectAll(".heatmap")
-			.data(data, function(d) { return d[0][0] + ':' + d[0][1]; })
-		  .enter().append("svg:rect")
-			.attr("x", function(d) { return d[0][0] * w; })
-			.attr("y", function(d) { return d[0][1] * h; })
-			.attr("class", "heat")
-			.attr("data-count", function(d) { return d[2] })
-			.style("fill", function(d) { 
-				// calculate colors on the fly
-				var opac = Math.abs(d[1] / maxDelay),
-					hMod = parseFloat(d[1] / maxDelay),
-					hMin = 0,
-					hMax = 60;
-				var newMod = (1 - hMod) * hMax,
-					l = newMod * 1.4 > 60 ? newMod * 1.4 : 60;
-					color = hMod < 0 ? "rgba(0,0,255," + opac + ")" : "hsl(" + newMod + ", 90%, " + l + "%)";
-				return color;
-			})
-			.attr("data-delay", function(d) { return d[1] })
-			.attr("data-date" , function(d) { return "Time: " + d[0][0] + ":00, Day: " + d[0][1] })
-			//.attr("data-content" , function(d) { return "Average Delay: " + d[1] })
-			.transition()
-				.delay( function(d, i) { return 5 * i; })
-				.duration(1000) //animate their growth
-			.attr("width", function(d) { return w; })
-			.attr("height", function(d) { return h; })
+		for (var key in data) {
+			if (data.hasOwnProperty(key)) {
+				var singleData = data[key];
+				for (var single in singleData) {
+					delays.push(singleData[single][1]);
+				}
+			}
+		}
+		
+		var maxDelay = Math.max.apply(Math, delays) < 20 ? Math.max.apply(Math, delays) : 20; // outliers, killing me
+				
+		var count = 0;
+		
+		for (var key in data) {
+		  if (data.hasOwnProperty(key)) {
+			var heightMod = count * 9.5 * h;
+			count++;
+			var airName = key;
+			var singleData = data[key];
+			var cl = "g" + count;
+			
+			var heatMap = g.append("g")
+				.attr("class", cl)
+				.selectAll(".heatmap")
+				.data(singleData, function(d) { return d[0][0] + ':' + d[0][1]; })
+			  .enter().append("svg:rect")
+				.attr("x", function(d) { return d[0][0] * w; })
+				.attr("y", function(d) { return d[0][1] * h - h + heightMod; })
+				.attr("class", airName + " heat")
+				.attr("data-count", function(d) { return d[2] })
+				.style("fill", function(d) { 
+					// calculate colors on the fly -- custom color mapping function
+					var opac = Math.abs(d[1] / maxDelay),
+						hMod = parseFloat(d[1] / maxDelay),
+						hMax = 60;
+					var newMod = (1 - hMod) * hMax,
+						l = newMod * 1.4 > 60 ? newMod * 1.4 : 60;
+						color = hMod < 0 ? "rgba(0,0,255," + opac + ")" : "hsl(" + newMod + ", 90%, " + l + "%)";
+					return color;
+				})
+				.attr("data-delay", function(d) { return d[1] })
+				.attr("data-date" , function(d) { return "Time: " + d[0][0] + ":00, Day: " + d[0][1] })
+				//.attr("data-content" , function(d) { return "Average Delay: " + d[1] })
+				.transition()
+					.delay( function(d, i) { return 5 * i; })
+					.duration(1000) //animate their growth
+				.attr("width", function(d) { return w; })
+				.attr("height", function(d) { return h; })
 
-		
-		//fill window up after drawing
-		svg.attr("width", $(window).width());
-		
-		var x_extent = d3.extent(data, function(d){return d[0][0]});
-		x_extent = [0,24];
-		var x_scale = d3.scale.linear()
-							.domain(x_extent)
-							.range([margin, width + margin]);
-		
-		//var y_extent = d3.extent(data, function(d){return d[0][1]});
-		//y_extent = [0,7];
-		//hardcoding this was wa easier
-		var y_extent = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-		
-		var y_scale = d3.scale.ordinal()
-						.domain(y_extent)
-						.rangeBands([0, 7 * h]);		
-		
-		var x_axis = d3.svg.axis()
-			.scale(x_scale)
-			.orient("bottom")
-			.ticks(24);
-		
-		g.append("g")
-			.attr("class", "x axis")
-			.attr("transform", "translate(-" + margin + ", " + (h * 8) + ")") //not sure why the modifier was needed
-			.call(x_axis);
-		
-		var y_axis = d3.svg.axis().scale(y_scale).orient("left").ticks(8);
-		g.append("g")
-			.attr("class", "y axis")
-			.attr("transform", "translate(0, " + h + ")")
-			.call(y_axis);
-		
-		//a xis titles
-		d3.select(".x.axis").append("text").text("Time").attr("x", function(){return width / 2 }).attr("y", margin); 
-		// removed y axis title to save space
-		//d3.select(".y.axis").append("text").text("Day of the Week").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", 3 * h - margin).attr("y", 0);		
+			//fill window up after drawing
+			svg.attr("width", $(window).width());
+			
+			var x_extent = d3.extent(singleData, function(d){return d[0][0]});
+			x_extent = [0,24];
+			var x_scale = d3.scale.linear()
+								.domain(x_extent)
+								.range([margin, w * 24 + margin]);
+			
+			//var y_extent = d3.extent(data, function(d){return d[0][1]});
+			//y_extent = [0,7];
+			//hardcoding this was wa easier
+			var y_extent = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+			
+			var y_scale = d3.scale.ordinal()
+							.domain(y_extent)
+							.rangeBands([0, 7 * h]);		
+			
+			var x_axis = d3.svg.axis()
+				.scale(x_scale)
+				.orient("bottom")
+				.ticks(12);
+			
+			d3.select("g." + cl).append("g")
+				.attr("class", "x axis")
+				.attr("transform", "translate(-" + margin + ", " + (h * 7 + heightMod) + ")") //not sure why the modifier was needed
+				.call(x_axis);
+			
+			var y_axis = d3.svg.axis().scale(y_scale).orient("left").ticks(8);
+			d3.select("g." + cl).append("g")
+				.attr("class", "y axis")
+				.attr("transform", "translate(0, " + heightMod + ")")
+				.call(y_axis);
+			
+			//a xis titles
+			d3.select(".x.axis")
+				.append("text")
+				.text("Time")
+				.attr("x", width / 2)
+				.attr("y", margin - (h / 2) + heightMod + 10);
+			// removed y axis title to save space
+			//d3.select(".y.axis").append("text").text("Day of the Week").attr("transform", "rotate (90, " + -margin + ", 0)").attr("x", 3 * h - margin).attr("y", 0);		
+			
+			//chart title
+			d3.select("g." + cl).append("g")
+				.append("text")
+				.text("Delays for " + fullCarrier(airName))
+				.attr("y", heightMod - 10)
+				.attr("x", width / 2 - 50)
+				.attr("class", "title");
+			}
+		}
 	}
 	
 	// TOOLTIPS and Brushing
@@ -382,31 +389,32 @@ function draw(data, flag) {
 			localData.removeClass("gone");
 			var delay = Math.round(target.getAttribute("data-delay") * 100) / 100 // only attribute used for all three
 			
-			if (!d3.select(target).classed("heat")) {
-				var airline = target.getAttribute("class").split(" ")[0];
+			//if (!d3.select(target).classed("heat")) {
+			var airline = target.getAttribute("class").split(" ")[0];
+			var fullName = fullCarrier(airline);
 
-				$.ajax({
-					url: 'functions.php',
-					data: {"abbrev":airline},
-					success: function(data) { 
+				// $.ajax({
+					// url: 'functions.php',
+					// data: {"abbrev":airline},
+					// success: function(data) { 
 					//show/hide and data
-						if (!d3.select(target).classed("bar")) {
-							var date = new Date(parseInt(target.getAttribute("data-date"))),
-							dateStr = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear()
+			if (!d3.select(target).classed("trend")) { // do different stuff for trendline hover
+				if (!d3.select(target).classed("bar") && !d3.select(target).classed("heat")) {
+					var date = new Date(parseInt(target.getAttribute("data-date"))),
+					dateStr = date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear()
 
-							localData
-								.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + data + "<br /><b>Date: </b>" + dateStr)
-						} else {
-							localData
-								.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1><b>Airline:</b> " + data + "<br />")
-						}
-					}
-				});
-			} else {
+					localData
+						.html("<h2 class='delay'>" + delay + "<small> minutes</small></h2><b>Airline:</b> " + fullName + "<br /><b>Date: </b>" + dateStr)
+				} else { 
+					localData
+						.html("<h2 class='delay'>" + delay + "<small> minutes</small></h2><b>Airline:</b> " + fullName + "<br />")
+				}
+			} else { // hit a trendline, only show airline!
 				localData
-					.html("<h2 class='delay'>" + delay + "<small> minutes</small></h1>" + $(target).attr("data-date"))
+					.html("<h2 class='delay'>" + fullName + "</h2>")
 			}
 		}
+		
 		
 		//labels BRUSHING
 		//brushing

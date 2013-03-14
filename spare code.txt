@@ -38,6 +38,14 @@ INDEX.PHP
 			  </div>
 			</div>
 	
+	<img src="table.png" class="tools bottom">
+
+	<div id="table">
+		<span class="close">&times;</span>
+		<table class="table table-striped table-hover table-bordered table-condensed">
+			
+		</table>
+	</div>
 	
 	
 DATA.PHP
@@ -103,3 +111,47 @@ JS.JS
 			// }
 		// }
 	// });	
+	
+VIZ.JS
+// Deprecated responsive code
+// $(window).on("resize", function() {
+	// var chart = $("svg");
+	// if (chart.length !== 0) {
+		// margin = $(window).width() / 20;
+		// width = $(window).width() - margin * 5;
+		// height = $(window).height() - 150;
+		// chart.attr("width", width+margin);
+		// chart.attr("height", height+margin);
+	// }
+// });
+
+
+combinated this already
+// });
+	// } else {
+		// localData
+			// .html("<h2 class='delay'>" + delay + "<small> minutes</small></h1>" + $(target).attr("data-date"))
+	// }
+}
+
+table code removed
+// wipe table in prep
+// var table = $("#table table");
+// table.children().remove();
+// table.append("<tr><th>Date</th><th>Airline</th><th>Delay</th></tr>");
+// function populateTable(data, name) {
+	// append header row
+	// try {
+		// var d = new Date(data[0].date);
+		// dateStr = d.getMonth() + 1 + "/" + d.getDate() + "/" + parseInt(d.getYear() + 1900);
+		// populate table
+		// table.append("<tr><td>" + 
+								// dateStr + 
+								// "</td><td>" + name.toUpperCase() + 
+								// "</td><td>" + data[0].delay + 
+								// "</td></tr>");
+	// } catch(err) {
+		// remove this line for production
+		// console.warn("Empty object passed, accessing its fields yielded a: " + err);
+	// }
+// }
