@@ -318,6 +318,31 @@ img.tools {
 	h2 {
 		color:@baseColor;
 	}
+	#heatLegend {
+		display:none;
+		.grad {
+			width:85%;
+			margin:0 auto;
+			min-height:20px;
+			background: #2c4fdd;
+			background: -moz-linear-gradient(left,  #2c4fdd 0%, #fff830 25%, #ff2828 77%, #dd4f88 100%);
+			background: -webkit-gradient(linear, left top, right top, color-stop(0%,#2c4fdd), color-stop(25%,#fff830), color-stop(77%,#ff2828), color-stop(100%,#dd4f88));
+			background: -webkit-linear-gradient(left,  #2c4fdd 0%,#fff830 25%,#ff2828 77%,#dd4f88 100%);
+			background: -o-linear-gradient(left,  #2c4fdd 0%,#fff830 25%,#ff2828 77%,#dd4f88 100%);
+			background: -ms-linear-gradient(left,  #2c4fdd 0%,#fff830 25%,#ff2828 77%,#dd4f88 100%);
+			background: linear-gradient(to right,  #2c4fdd 0%,#fff830 25%,#ff2828 77%,#dd4f88 100%);
+		}
+		span {
+		color:@baseColor;
+		max-width:40%;
+		&.left {
+			float:left;
+		}
+		&.right {
+			float:right;
+		}
+	}
+	}
 }
 
 #table {

@@ -36,6 +36,12 @@
 		<?php } ?>
 		<ul>
 	</div>
+	<div id="heatLegend">
+		<h3>Legend</h3>
+		<div class="grad"></div>
+		<span class="left">Low</span><span class="right">High</span>
+	</div>
+	<div class="clear"></div>
 	<div class="detail">
 		<h3>Selected:</h3>
 		<div class="local-data"></div>

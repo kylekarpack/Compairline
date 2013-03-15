@@ -8,6 +8,7 @@ var height = $(window).height() - 150;
 function draw(data, flag) {	
 	$('svg').remove();
 	$("#cust1").show(); //bugfix
+	$("#heatLegend").hide();
 	$("#brushing .checkbox").hide(); //bugfix
 
 		
@@ -212,6 +213,7 @@ function draw(data, flag) {
 		  // }, 2000);
 	
 	} else {	//heatmap
+		$("#heatLegend").show();
 		$("#cust1").hide();
 		width = width + margin * 3; // this viz can be wider
 		height = $(window).height();
